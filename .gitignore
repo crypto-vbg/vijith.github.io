@@ -1,0 +1,24 @@
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# build
+dist
+build
+
+# env — never commit API keys
+.env
+.env.local
+.env.*.local
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+
+# local resume source (published content lives in src/content)
+resume/
