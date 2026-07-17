@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "embed": "node scripts/build-embeddings.mjs"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

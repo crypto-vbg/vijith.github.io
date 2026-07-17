@@ -1,6 +1,7 @@
-// Sanitized portfolio knowledge base for the RAG chatbot.
+// Sanitized portfolio knowledge base for the chatbot.
 // Source: Resume.pdf + portfolio brief. Phone number intentionally excluded.
-// Each chunk is embedded independently; keep chunks focused on one topic.
+// The whole corpus (~2.5k tokens) is sent as grounding context on every
+// request — no retrieval step. Keep chunks focused on one topic.
 
 export const CHUNKS = [
   {
@@ -101,6 +102,6 @@ export const CHUNKS = [
   {
     id: "this-site",
     section: "Portfolio",
-    text: `This portfolio website itself is one of Vijith's projects: a React (Vite) single-page app with cinematic Framer Motion animations, deployed on Vercel. The chatbot you are talking to is a Retrieval-Augmented Generation (RAG) assistant Vijith built: his resume and portfolio content are sanitized, chunked, and embedded; user queries retrieve the most relevant context via cosine similarity; and Google Gemini generates grounded answers through a serverless edge function with rate limiting and a fair request queue.`,
+    text: `This portfolio website itself is one of Vijith's projects: a React (Vite) single-page app with cinematic Framer Motion animations, deployed on Vercel. The chatbot you are talking to is a grounded AI assistant Vijith built: his resume and portfolio content are sanitized and provided to Google Gemini as grounding context, and answers are streamed through a serverless edge function with rate limiting and a fair request queue.`,
   },
 ];

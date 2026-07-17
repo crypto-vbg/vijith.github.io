@@ -6,8 +6,8 @@
 //  • In any "title" field, text wrapped in *asterisks* renders with the
 //    gradient accent (e.g. "not just *applications*").
 //  • Paragraph fields support light Markdown: **bold**, links, bullets.
-//  • The CHATBOT'S knowledge lives in scripts/knowledge-content.mjs —
-//    after editing that file, run `npm run embed` to refresh it.
+//  • The CHATBOT'S knowledge lives in api/_lib/knowledge.js — edit it and
+//    redeploy; no build step needed.
 // ============================================================================
 
 export const SITE = {
@@ -174,9 +174,9 @@ export const SITE = {
       },
       {
         tag: "This Website",
-        title: "Portfolio + RAG Chatbot",
-        desc: "The site you're on: React + Framer Motion frontend, and a serverless RAG chatbot grounded in my resume — sanitized, chunked, embedded, retrieved by cosine similarity, answered by Gemini with streaming, rate limiting and a fair queue.",
-        chips: ["React (Vite)", "Gemini", "RAG", "Vercel Edge", "SSE"],
+        title: "Portfolio + AI Chatbot",
+        desc: "The site you're on: React + Framer Motion frontend, and a serverless chatbot grounded in my resume — sanitized content inlined as full-context grounding, answered by Gemini with streaming, rate limiting and a fair queue.",
+        chips: ["React (Vite)", "Gemini", "Vercel Edge", "SSE"],
         link: "https://github.com/crypto-vbg/vijith.github.io",
         linkLabel: "View source →",
         viz: "chat",
