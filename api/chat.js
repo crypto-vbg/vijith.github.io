@@ -6,41 +6,48 @@
 // into the system prompt instead of doing per-request embedding + retrieval —
 // one Gemini call per message instead of two, and no retrieval latency.
 //
-// The Gemini API key stays server-side. Rate limiting is in-memory
-// (best-effort per warm isolate) tuned to stay under Gemini free-tier RPM;
-// clients receive 429 + retryAfter and queue politely.
+// The Gemini API key stays server-side. Rate limiting is a shared sliding
+// window (60 req/min global + a per-visitor cap) backed by Upstash Redis when
+// provisioned, so every edge isolate enforces the same budget; without Redis it
+// degrades to a best-effort per-isolate window. Clients receive 429 +
+// retryAfter and queue politely.
 import { CHUNKS } from "./_lib/knowledge.js";
+import { createLimiter } from "./_lib/ratelimit.js";
 
 export const config = { runtime: "edge" };
 
-const GEN_MODEL = "gemini-flash-latest";
-const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 8; // requests per rolling minute this isolate will forward
+// Primary model, plus a fallback for when its free-tier quota runs out
+// (gemini-flash free tier is only ~20 requests/day; flash-lite is far higher).
+const GEN_MODEL = process.env.CHAT_MODEL || "gemini-flash-latest";
+const FALLBACK_MODEL = process.env.CHAT_FALLBACK_MODEL || "gemini-flash-lite-latest";
 const MAX_TURNS = 12; // history turns forwarded to the model
 const MAX_MESSAGE_CHARS = 1_500;
 
-let recentStarts = []; // timestamps of forwarded requests (rolling window)
-let providerBackoffUntil = 0; // set when Gemini itself returns 429/503
+let primaryExhaustedUntil = 0; // per-isolate: skip doomed primary calls briefly
 
-function prune(now) {
-  recentStarts = recentStarts.filter((t) => now - t < WINDOW_MS);
+const limiter = createLimiter();
+
+function availabilityStatus({ used, capacity, backoffMs, retryAfterSec }) {
+  if (backoffMs > 0 || used >= capacity) {
+    return { status: "high", used, capacity, retryAfter: retryAfterSec ?? 30 };
+  }
+  if (used >= capacity * 0.6) return { status: "busy", used, capacity };
+  return { status: "available", used, capacity };
 }
 
-function availability(now) {
-  prune(now);
-  const used = recentStarts.length;
-  const backoff = providerBackoffUntil > now;
-  if (backoff || used >= MAX_PER_WINDOW) {
-    const waitMs = backoff
-      ? providerBackoffUntil - now
-      : recentStarts[0] + WINDOW_MS - now;
-    return { status: "high", used, capacity: MAX_PER_WINDOW, retryAfter: Math.ceil(waitMs / 1000) };
-  }
-  if (used >= MAX_PER_WINDOW * 0.6) {
-    return { status: "busy", used, capacity: MAX_PER_WINDOW };
-  }
-  return { status: "available", used, capacity: MAX_PER_WINDOW };
+function clientIp(request) {
+  return (
+    request.headers.get("x-real-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    "unknown"
+  );
 }
+
+const QUEUE_COPY = {
+  backoff: "The AI provider is at capacity. You're in the queue.",
+  global: "The assistant is at capacity right now. You're in the queue.",
+  ip: "You've sent quite a few messages this minute — a short pause keeps things fair for other visitors.",
+};
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -58,31 +65,20 @@ function json(body, status = 200, headers = {}) {
 export default async function handler(request) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
-  const now = Date.now();
   if (request.method === "GET") {
-    return json({ ...availability(now), model: GEN_MODEL });
+    return json({
+      ...availabilityStatus(await limiter.peek()),
+      backend: limiter.backend,
+      model: GEN_MODEL,
+      fallbackModel: FALLBACK_MODEL,
+    });
   }
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return json({ error: "Chatbot is not configured (missing API key)." }, 500);
 
-  // ---- admission control ----
-  const avail = availability(now);
-  if (avail.status === "high") {
-    const retryAfter = Math.max(2, Math.min(avail.retryAfter ?? 15, 60));
-    return json(
-      {
-        error: "queue",
-        message: "The assistant is at capacity right now.",
-        retryAfter,
-        queuePosition: Math.max(1, recentStarts.length - MAX_PER_WINDOW + 1),
-      },
-      429,
-      { "Retry-After": String(retryAfter) }
-    );
-  }
-
+  // ---- validation (before admission, so bad requests don't burn a slot) ----
   let payload;
   try {
     payload = await request.json();
@@ -96,7 +92,21 @@ export default async function handler(request) {
     return json({ error: `Message too long (max ${MAX_MESSAGE_CHARS} characters).` }, 400);
   }
 
-  recentStarts.push(now);
+  // ---- admission control (shared sliding window) ----
+  const gate = await limiter.take(clientIp(request));
+  if (!gate.ok) {
+    const retryAfter = gate.retryAfterSec;
+    return json(
+      {
+        error: "queue",
+        message: QUEUE_COPY[gate.reason] ?? QUEUE_COPY.global,
+        retryAfter,
+        queuePosition: gate.queuePosition,
+      },
+      429,
+      { "Retry-After": String(retryAfter) }
+    );
+  }
 
   try {
     // ---- generation (streaming) ----
@@ -108,28 +118,48 @@ export default async function handler(request) {
         parts: [{ text: String(m.content).slice(0, MAX_MESSAGE_CHARS) }],
       }));
 
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${GEN_MODEL}:streamGenerateContent?alt=sse`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-goog-api-key": apiKey },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents,
-          generationConfig: {
-            temperature: 0.6,
-            // no thinking: reasoning tokens count against the output budget
-            // and were starving answers into empty responses
-            maxOutputTokens: 1024,
-            thinkingConfig: { thinkingBudget: 0 },
-          },
-        }),
+    const callModel = (model) =>
+      fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-goog-api-key": apiKey },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            contents,
+            generationConfig: {
+              temperature: 0.6,
+              // no thinking: reasoning tokens count against the output budget
+              // and were starving answers into empty responses
+              maxOutputTokens: 1024,
+              thinkingConfig: { thinkingBudget: 0 },
+            },
+          }),
+        }
+      );
+
+    const models = [];
+    if (Date.now() >= primaryExhaustedUntil) models.push(GEN_MODEL);
+    if (FALLBACK_MODEL && FALLBACK_MODEL !== GEN_MODEL) models.push(FALLBACK_MODEL);
+
+    let geminiRes;
+    let servedBy = models[0];
+    for (const model of models) {
+      servedBy = model;
+      geminiRes = await callModel(model);
+      if (geminiRes.ok) break;
+      if ((geminiRes.status === 429 || geminiRes.status === 503) && model === GEN_MODEL) {
+        // Quota exhausted on the primary (free tier is per-day) — remember for
+        // a couple of minutes so waiting visitors go straight to the fallback.
+        primaryExhaustedUntil = Date.now() + 120_000;
+        continue;
       }
-    );
+      break;
+    }
 
     if (!geminiRes.ok) {
       if (geminiRes.status === 429 || geminiRes.status === 503) {
-        providerBackoffUntil = Date.now() + 30_000;
+        await limiter.noteProviderBackoff(30_000);
         return json(
           {
             error: "queue",
@@ -193,6 +223,7 @@ export default async function handler(request) {
         "Content-Type": "text/event-stream; charset=utf-8",
         "Cache-Control": "no-cache, no-transform",
         Connection: "keep-alive",
+        "X-Chat-Model": servedBy,
         ...CORS,
       },
     });
