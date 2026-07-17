@@ -1,32 +1,32 @@
 import Reveal from "./Reveal.jsx";
-import { LINKS } from "../data/content.js";
+import { SITE } from "../site.config.js";
+import { GradTitle } from "./text.jsx";
 
 export default function Contact() {
+  const { contact } = SITE;
   return (
     <section id="contact">
       <div className="container contact-wrap">
         <Reveal>
           <div className="kicker" style={{ justifyContent: "center" }}>
-            06 · Contact
+            {contact.kicker}
           </div>
           <h2 className="section-title">
-            Let's build something <span className="grad-text">intelligent</span>
+            <GradTitle text={contact.title} />
           </h2>
-          <p className="section-sub">
-            Open to conversations about Generative AI, agentic systems and hard problems worth
-            solving. The fastest way to learn about my work? Ask the AI assistant in the corner
-            — I built it.
-          </p>
+          <p className="section-sub">{contact.subtitle}</p>
           <div className="contact-links">
-            <a className="btn-primary" href={`mailto:${LINKS.email}`}>
-              ✉ {LINKS.email}
-            </a>
-            <a className="btn-ghost" href={LINKS.linkedin} target="_blank" rel="noreferrer">
-              LinkedIn
-            </a>
-            <a className="btn-ghost" href={LINKS.github} target="_blank" rel="noreferrer">
-              GitHub
-            </a>
+            {contact.buttons.map((b) => (
+              <a
+                key={b.label}
+                className={b.primary ? "btn-primary" : "btn-ghost"}
+                href={b.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {b.label}
+              </a>
+            ))}
           </div>
         </Reveal>
       </div>

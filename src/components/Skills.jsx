@@ -1,22 +1,21 @@
 import Reveal from "./Reveal.jsx";
-import { SKILL_GROUPS } from "../data/content.js";
+import { SITE } from "../site.config.js";
+import { GradTitle } from "./text.jsx";
 
 export default function Skills() {
+  const { skills } = SITE;
   return (
     <section id="skills" className="skills-section">
       <div className="container">
         <Reveal>
-          <div className="kicker">04 · Capabilities</div>
+          <div className="kicker">{skills.kicker}</div>
           <h2 className="section-title">
-            The <span className="grad-text">full stack</span> of modern AI engineering
+            <GradTitle text={skills.title} />
           </h2>
-          <p className="section-sub">
-            From agent orchestration to eval harnesses to the cloud infrastructure it all runs
-            on — one engineer, the whole lifecycle.
-          </p>
+          <p className="section-sub">{skills.subtitle}</p>
         </Reveal>
         <div className="skill-groups">
-          {SKILL_GROUPS.map((g, i) => (
+          {skills.groups.map((g, i) => (
             <Reveal key={g.title} delay={0.07 * (i % 2)}>
               <div className="skill-group">
                 <h4>

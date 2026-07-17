@@ -1,9 +1,11 @@
+import { SITE } from "../site.config.js";
+
 export default function Footer() {
   return (
     <footer>
       <div className="footer-inner">
-        <span>© {new Date().getFullYear()} Vijith BG · Bengaluru, India</span>
-        <span className="mono">designed & built with react, framer-motion & a lot of AI ✦</span>
+        <span>{SITE.footer.left.replace("{year}", new Date().getFullYear())}</span>
+        <span className="mono">{SITE.footer.right}</span>
       </div>
     </footer>
   );

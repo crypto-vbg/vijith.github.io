@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ROLES, STATS } from "../data/content.js";
+import { SITE } from "../site.config.js";
+import { RichText } from "./text.jsx";
 
 function useTypewriter(words) {
   const [text, setText] = useState("");
@@ -36,15 +37,32 @@ function useTypewriter(words) {
   return text;
 }
 
-/** Neural-network particle field. */
+/** True on phones / reduced-motion — heavy effects are skipped entirely. */
+function useLiteMode() {
+  const [lite, setLite] = useState(true);
+  useEffect(() => {
+    const check = () =>
+      setLite(
+        window.matchMedia("(max-width: 820px)").matches ||
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      );
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return lite;
+}
+
+/** Neural-network particle field (desktop only). */
 function NeuralCanvas() {
   const ref = useRef(null);
   useEffect(() => {
     const canvas = ref.current;
     const ctx = canvas.getContext("2d");
     let raf;
+    let running = true;
     let particles = [];
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
     const mouse = { x: -9999, y: -9999 };
 
     const resize = () => {
@@ -68,6 +86,7 @@ function NeuralCanvas() {
 
     const LINK = 130;
     const draw = () => {
+      if (!running) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const p of particles) {
         p.x += p.vx;
@@ -111,10 +130,20 @@ function NeuralCanvas() {
 
     resize();
     draw();
+    // stop burning GPU once the hero is scrolled out of view
+    const io = new IntersectionObserver(([entry]) => {
+      const wasRunning = running;
+      running = entry.isIntersecting;
+      if (running && !wasRunning) draw();
+      if (!running) cancelAnimationFrame(raf);
+    });
+    io.observe(canvas);
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", onMouse);
     return () => {
+      running = false;
       cancelAnimationFrame(raf);
+      io.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouse);
     };
@@ -132,44 +161,37 @@ const fadeUp = {
 };
 
 export default function Hero() {
-  const role = useTypewriter(ROLES);
+  const { hero } = SITE;
+  const role = useTypewriter(hero.roles);
+  const lite = useLiteMode();
   return (
     <section className="hero" id="top">
-      <NeuralCanvas />
+      {!lite && <NeuralCanvas />}
       <div className="hero-glow one" />
       <div className="hero-glow two" />
       <div className="hero-inner">
         <motion.div initial="hidden" animate="show">
           <motion.div className="hero-badge" variants={fadeUp} custom={0}>
             <span className="pulse-dot" />
-            Building production AI at GSK · Bengaluru, India
+            {hero.badge}
           </motion.div>
           <motion.h1 className="hero-title" variants={fadeUp} custom={1}>
-            Vijith <span className="grad-text">BG</span>
+            {hero.titleFirst} <span className="grad-text">{hero.titleAccent}</span>
           </motion.h1>
           <motion.div className="hero-role" variants={fadeUp} custom={2}>
             <span className="grad-text">{role}</span>
             <span className="cursor" />
           </motion.div>
-          <motion.p className="hero-desc" variants={fadeUp} custom={3}>
-            I don't just build software — I build <strong>intelligent, scalable AI systems</strong>.
-            From ambiguous business problem to production: multi-agent systems, enterprise RAG,
-            NL-to-SQL analytics and LLM fine-tuning, shipped end to end with{" "}
-            <strong>security, evals and governance</strong> built in.
-          </motion.p>
+          <motion.div className="hero-desc" variants={fadeUp} custom={3}>
+            <RichText text={hero.description} />
+          </motion.div>
           <motion.div className="hero-actions" variants={fadeUp} custom={4}>
-            <button
-              className="btn-primary"
-              onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
-            >
-              ✦ Chat with my AI assistant
-            </button>
-            <a className="btn-ghost" href="#experience">
-              Explore my work ↓
+            <a className="btn-primary" href="#experience">
+              {hero.ctaSecondary}
             </a>
           </motion.div>
           <motion.div className="hero-stats" variants={fadeUp} custom={5}>
-            {STATS.map((s) => (
+            {hero.stats.map((s) => (
               <div className="hero-stat" key={s.label}>
                 <b className="grad-text">{s.value}</b>
                 <span>{s.label}</span>

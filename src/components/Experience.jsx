@@ -1,39 +1,38 @@
 import Reveal from "./Reveal.jsx";
-import { EXPERIENCE } from "../data/content.js";
+import { SITE } from "../site.config.js";
+import { GradTitle } from "./text.jsx";
 
 export default function Experience() {
+  const xp = SITE.experience;
   return (
     <section id="experience" className="xp-section">
       <div className="container">
         <Reveal>
-          <div className="kicker">02 · Experience</div>
+          <div className="kicker">{xp.kicker}</div>
           <h2 className="section-title">
-            Enterprise AI, <span className="grad-text">shipped and adopted</span>
+            <GradTitle text={xp.title} />
           </h2>
-          <p className="section-sub">
-            Every system below runs in production at GSK — used daily by finance, legal and
-            commercial teams, compressing weeks of manual work into minutes.
-          </p>
+          <p className="section-sub">{xp.subtitle}</p>
         </Reveal>
         <Reveal delay={0.1}>
           <div className="xp-org">
-            <h3>GSK (GlaxoSmithKline)</h3>
-            <span className="period">AI Lead Engineer, Global Functions · Jan 2024 — Present</span>
+            <h3>{xp.org}</h3>
+            <span className="period">{xp.period}</span>
           </div>
         </Reveal>
         <div className="timeline">
-          {EXPERIENCE.map((xp, i) => (
-            <Reveal key={xp.title} delay={0.08 * (i % 3)}>
+          {xp.items.map((item, i) => (
+            <Reveal key={item.title} delay={0.08 * (i % 3)}>
               <div className="xp-item">
                 <div className="xp-card">
                   <div className="xp-meta">
-                    <span className="xp-role-tag">{xp.tag}</span>
+                    <span className="xp-role-tag">{item.tag}</span>
                   </div>
-                  <h4 className="xp-title">{xp.title}</h4>
-                  <span className="xp-impact">▲ {xp.impact}</span>
-                  <p className="xp-desc">{xp.desc}</p>
+                  <h4 className="xp-title">{item.title}</h4>
+                  <span className="xp-impact">▲ {item.impact}</span>
+                  <p className="xp-desc">{item.desc}</p>
                   <div className="chip-row">
-                    {xp.chips.map((c) => (
+                    {item.chips.map((c) => (
                       <span className="chip" key={c}>{c}</span>
                     ))}
                   </div>

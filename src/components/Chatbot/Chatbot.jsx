@@ -1,23 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Markdown from "./Markdown.jsx";
+import { SITE } from "../../site.config.js";
 import "./chatbot.css";
 
-const SUGGESTED = [
-  "Tell me about yourself.",
-  "What AI projects have you built?",
-  "Explain your experience with Generative AI.",
-  "What makes you different from other AI Engineers?",
-  "Tell me about your hobbies.",
-  "Why do you enjoy motorcycle riding?",
-];
-
-const QUEUE_MESSAGES = [
-  "Holding your spot in line…",
-  "The assistant is helping other visitors…",
-  "Good things come to those who queue ✨",
-  "Almost there — thanks for your patience…",
-];
+const SUGGESTED = SITE.chatbot.suggestedQuestions;
+const QUEUE_MESSAGES = SITE.chatbot.queueMessages;
 
 const STATUS_META = {
   available: { icon: "🟢", label: "Available", hint: "Responses are immediate" },
@@ -133,9 +121,7 @@ export default function Chatbot() {
 
           if (res.status === 429) {
             if (attempt === MAX_RETRIES) {
-              fail(
-                "I'm at capacity right now and the queue is long. Please try again in a minute or two — or reach Vijith directly at vijithkrish24@gmail.com."
-              );
+              fail(SITE.chatbot.capacityMessage);
               return;
             }
             const info = await res.json().catch(() => ({}));
@@ -236,7 +222,7 @@ export default function Chatbot() {
             <div className="cb-header">
               <div className="cb-avatar">✦</div>
               <div className="cb-headtext">
-                <b>Vijith's AI Assistant</b>
+                <b>{SITE.chatbot.title}</b>
                 <span className="cb-status" title={meta.hint}>
                   {meta.icon} {meta.label} · {meta.hint}
                 </span>
@@ -253,11 +239,7 @@ export default function Chatbot() {
             <div className="cb-body" ref={scrollRef}>
               <div className="cb-msg assistant">
                 <div className="cb-bubble">
-                  <p>
-                    Hi! I'm an AI assistant trained on <strong>Vijith's portfolio</strong>. Ask
-                    me about his AI projects, GSK work, skills — or his motorcycle adventures.
-                    🏍️
-                  </p>
+                  <Markdown text={SITE.chatbot.welcome} />
                 </div>
               </div>
 
@@ -308,7 +290,7 @@ export default function Chatbot() {
               <textarea
                 rows={1}
                 value={input}
-                placeholder="Ask about Vijith's work…"
+                placeholder={SITE.chatbot.placeholder}
                 maxLength={1000}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
@@ -333,9 +315,7 @@ export default function Chatbot() {
                 </button>
               )}
             </div>
-            <div className="cb-footnote">
-              AI-generated from Vijith's portfolio · may be imperfect · no phone number shared
-            </div>
+            <div className="cb-footnote">{SITE.chatbot.footnote}</div>
           </motion.div>
         )}
       </AnimatePresence>

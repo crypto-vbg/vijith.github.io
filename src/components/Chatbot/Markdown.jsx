@@ -12,8 +12,10 @@ function renderInline(text, keyBase) {
   let last = 0;
   let m;
   let i = 0;
-  INLINE_RE.lastIndex = 0;
-  while ((m = INLINE_RE.exec(text))) {
+  // fresh regex per call — a shared global regex would have its lastIndex
+  // corrupted by the recursive call for bold content (infinite loop)
+  const re = new RegExp(INLINE_RE.source, "g");
+  while ((m = re.exec(text))) {
     if (m.index > last) parts.push(text.slice(last, m.index));
     const tok = m[0];
     const key = `${keyBase}-${i++}`;

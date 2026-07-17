@@ -96,7 +96,7 @@ export const CHUNKS = [
   {
     id: "contact",
     section: "Contact",
-    text: `Contact Vijith BG: email vijithkrish24@gmail.com, LinkedIn linkedin.com/in/vijith-bg, GitHub github.com/crypto-vbg. He is based in Bengaluru, India. (Phone number is not shared through this chatbot.)`,
+    text: `The best way to contact Vijith BG is through LinkedIn: linkedin.com/in/vijith-bg. His work is on GitHub at github.com/crypto-vbg. He is based in Bengaluru, India. (His email address and phone number are private and are not shared through this chatbot — please reach out on LinkedIn.)`,
   },
   {
     id: "this-site",

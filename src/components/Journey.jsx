@@ -1,5 +1,5 @@
 import Reveal from "./Reveal.jsx";
-import { INTERESTS } from "../data/content.js";
+import { SITE } from "../site.config.js";
 
 // Deterministic pseudo-random star field (stable across renders).
 const STARS = Array.from({ length: 90 }, (_, i) => {
@@ -110,6 +110,7 @@ function Scene() {
 }
 
 export default function Journey() {
+  const { journey } = SITE;
   return (
     <section id="journey" className="journey-section">
       <div className="journey-scene">
@@ -117,24 +118,20 @@ export default function Journey() {
         <div className="journey-copy">
           <Reveal>
             <div className="kicker" style={{ justifyContent: "center" }}>
-              05 · Beyond code
+              {journey.kicker}
             </div>
             <h2 className="section-title">
-              Some systems I debug.
+              {journey.titleLine1}
               <br />
-              <span style={{ color: "#ffd9a0" }}>Some roads I just ride.</span>
+              <span style={{ color: "#ffd9a0" }}>{journey.titleLine2}</span>
             </h2>
-            <p>
-              When I'm not orchestrating agents, I'm leaning into hairpin bends on mountain
-              roads. Motorcycles, long routes and high altitudes — that's where the best
-              engineering ideas quietly arrive.
-            </p>
+            <p>{journey.text}</p>
           </Reveal>
         </div>
       </div>
       <div className="journey-interests">
         <div className="interest-grid">
-          {INTERESTS.map((it, i) => (
+          {journey.interests.map((it, i) => (
             <Reveal key={it.title} delay={0.08 * i}>
               <div className="interest-card">
                 <span className="emoji">{it.emoji}</span>

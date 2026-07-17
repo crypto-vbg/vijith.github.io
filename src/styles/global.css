@@ -206,12 +206,14 @@ section {
 .hero-glow {
   position: absolute;
   z-index: 0;
-  width: 720px;
-  height: 720px;
+  width: 520px;
+  height: 520px;
   border-radius: 50%;
-  filter: blur(140px);
-  opacity: 0.22;
+  /* keep blur modest — very large blur radii crash mobile/low-end GPUs */
+  filter: blur(90px);
+  opacity: 0.2;
   pointer-events: none;
+  transform: translateZ(0);
 }
 .hero-glow.one {
   background: #38bdf8;
@@ -911,4 +913,116 @@ footer {
   0%, 100% { opacity: 0.15; transform: translate(0, 0); }
   40% { opacity: 0.9; transform: translate(6px, -10px); }
   70% { opacity: 0.5; transform: translate(-4px, -18px); }
+}
+
+/* ------- mobile nav ------- */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-burger {
+  display: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1;
+}
+.nav-mobile {
+  list-style: none;
+  position: absolute;
+  z-index: 10;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  background: #06070d;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+}
+.nav-mobile a {
+  display: block;
+  padding: 13px 12px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 10px;
+}
+.nav-mobile a:hover {
+  background: var(--surface-2);
+  text-decoration: none;
+}
+@media (max-width: 760px) {
+  .nav-burger {
+    display: block;
+  }
+}
+
+/* ------- mobile: lighter & tighter ------- */
+@media (max-width: 820px) {
+  section {
+    padding: 72px 18px;
+  }
+  /* giant blurred glows are the single biggest GPU cost — swap for a cheap gradient */
+  .hero-glow {
+    display: none;
+  }
+  .hero {
+    background:
+      radial-gradient(ellipse 90% 40% at 80% 0%, rgba(56, 189, 248, 0.10), transparent 70%),
+      radial-gradient(ellipse 90% 40% at 10% 100%, rgba(124, 58, 237, 0.09), transparent 70%);
+  }
+  .hero-stats {
+    backdrop-filter: none;
+    background: var(--bg-2);
+  }
+  .hero-actions {
+    margin-bottom: 44px;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+  .timeline {
+    padding-left: 26px;
+  }
+  .xp-item::before {
+    left: -26px;
+    width: 12px;
+    height: 12px;
+    border-width: 2.5px;
+  }
+  .xp-card {
+    padding: 20px 18px;
+  }
+  .proj-card {
+    padding: 22px 18px;
+  }
+  .skill-group {
+    padding: 20px 18px;
+  }
+  .journey-scene {
+    min-height: 74vh;
+  }
+  .journey-copy {
+    padding: 100px 20px 38vh;
+  }
+  .journey-interests {
+    padding: 64px 18px 80px;
+  }
+  .cb-panel {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(9, 11, 20, 0.985);
+  }
+  .nav.scrolled {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(5, 6, 12, 0.95);
+  }
 }

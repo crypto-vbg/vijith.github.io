@@ -1,5 +1,6 @@
 import Reveal from "./Reveal.jsx";
-import { PROJECTS } from "../data/content.js";
+import { SITE } from "../site.config.js";
+import { GradTitle } from "./text.jsx";
 
 /** Small animated SVG motifs that give each project card life. */
 function Viz({ type }) {
@@ -79,20 +80,19 @@ function Viz({ type }) {
 }
 
 export default function Projects() {
+  const { projects } = SITE;
   return (
     <section id="projects">
       <div className="container">
         <Reveal>
-          <div className="kicker">03 · Key projects & research</div>
+          <div className="kicker">{projects.kicker}</div>
           <h2 className="section-title">
-            Intelligent systems, <span className="grad-text">not just applications</span>
+            <GradTitle text={projects.title} />
           </h2>
-          <p className="section-sub">
-            Research, fine-tuning and the AI running on this very page.
-          </p>
+          <p className="section-sub">{projects.subtitle}</p>
         </Reveal>
         <div className="proj-grid">
-          {PROJECTS.map((p, i) => (
+          {projects.items.map((p, i) => (
             <Reveal key={p.title} delay={0.08 * (i % 2)}>
               <div className="proj-card">
                 <div className="beam" />
