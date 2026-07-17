@@ -22,3 +22,6 @@ npm-debug.log*
 
 # local resume source (published content lives in src/content)
 resume/
+
+# raw AI-video source (served copy lives in public/media)
+video/

@@ -9,9 +9,9 @@
   border-radius: 50%;
   border: none;
   font-size: 24px;
-  color: #05060c;
+  color: #1c120b;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 10px 34px rgba(125, 211, 252, 0.4);
+  box-shadow: 0 10px 34px rgba(242, 184, 128, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 2px solid rgba(125, 211, 252, 0.5);
+  border: 2px solid rgba(242, 184, 128, 0.5);
   animation: fabRing 2.4s ease-out infinite;
   pointer-events: none;
 }
@@ -41,7 +41,7 @@
   flex-direction: column;
   border-radius: 20px;
   border: 1px solid var(--border-strong);
-  background: rgba(9, 11, 20, 0.92);
+  background: rgba(14, 11, 8, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
@@ -72,7 +72,7 @@
   height: 38px;
   border-radius: 12px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #05060c;
+  color: #1c120b;
   font-size: 18px;
   display: flex;
   align-items: center;
@@ -144,8 +144,8 @@
   border-bottom-left-radius: 4px;
 }
 .cb-msg.user .cb-bubble {
-  background: linear-gradient(135deg, rgba(125, 211, 252, 0.2), rgba(167, 139, 250, 0.22));
-  border: 1px solid rgba(125, 211, 252, 0.28);
+  background: linear-gradient(135deg, rgba(242, 184, 128, 0.2), rgba(232, 135, 95, 0.22));
+  border: 1px solid rgba(242, 184, 128, 0.28);
   border-bottom-right-radius: 4px;
 }
 .cb-msg.error .cb-bubble {
@@ -173,12 +173,12 @@
 .cb-bubble code {
   font-family: var(--font-mono);
   font-size: 12.5px;
-  background: rgba(125, 211, 252, 0.12);
+  background: rgba(242, 184, 128, 0.14);
   border-radius: 4px;
   padding: 1px 5px;
 }
 .cb-bubble pre {
-  background: #04050a;
+  background: #0a0705;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
@@ -261,15 +261,15 @@
 .cb-suggestions button {
   font-size: 12.5px;
   color: var(--accent);
-  background: rgba(125, 211, 252, 0.07);
-  border: 1px solid rgba(125, 211, 252, 0.28);
+  background: rgba(242, 184, 128, 0.07);
+  border: 1px solid rgba(242, 184, 128, 0.28);
   border-radius: 999px;
   padding: 7px 13px;
   transition: background 0.2s, transform 0.15s;
   text-align: left;
 }
 .cb-suggestions button:hover {
-  background: rgba(125, 211, 252, 0.16);
+  background: rgba(242, 184, 128, 0.16);
   transform: translateY(-1px);
 }
 
@@ -297,7 +297,7 @@
   transition: border-color 0.2s;
 }
 .cb-inputrow textarea:focus {
-  border-color: rgba(125, 211, 252, 0.5);
+  border-color: rgba(242, 184, 128, 0.5);
 }
 .cb-send {
   width: 40px;
@@ -305,7 +305,7 @@
   border-radius: 12px;
   border: none;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #05060c;
+  color: #1c120b;
   font-size: 15px;
   flex-shrink: 0;
   transition: opacity 0.2s, transform 0.15s;

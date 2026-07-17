@@ -53,102 +53,48 @@ function useLiteMode() {
   return lite;
 }
 
-/** Neural-network particle field (desktop only). */
-function NeuralCanvas() {
+/**
+ * Full-bleed cinematic backdrop — the film the whole page is graded to match.
+ * Desktop plays the clip slowed down with a slow Ken Burns drift; phones and
+ * reduced-motion get the poster frame only (no 7 MB download). Playback pauses
+ * once the hero scrolls out of view.
+ */
+function FilmBackdrop({ film, lite }) {
   const ref = useRef(null);
   useEffect(() => {
-    const canvas = ref.current;
-    const ctx = canvas.getContext("2d");
-    let raf;
-    let running = true;
-    let particles = [];
-    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
-    const mouse = { x: -9999, y: -9999 };
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * DPR;
-      canvas.height = canvas.offsetHeight * DPR;
-      const count = Math.min(110, Math.floor(canvas.offsetWidth / 14));
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.22 * DPR,
-        vy: (Math.random() - 0.5) * 0.22 * DPR,
-        r: (Math.random() * 1.4 + 0.6) * DPR,
-      }));
-    };
-
-    const onMouse = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = (e.clientX - rect.left) * DPR;
-      mouse.y = (e.clientY - rect.top) * DPR;
-    };
-
-    const LINK = 130;
-    const draw = () => {
-      if (!running) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-      }
-      for (let i = 0; i < particles.length; i++) {
-        const a = particles[i];
-        for (let j = i + 1; j < particles.length; j++) {
-          const b = particles[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const d = Math.hypot(dx, dy);
-          if (d < LINK * DPR) {
-            const alpha = (1 - d / (LINK * DPR)) * 0.16;
-            ctx.strokeStyle = `rgba(125, 211, 252, ${alpha})`;
-            ctx.lineWidth = DPR * 0.6;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
-        }
-        const dm = Math.hypot(a.x - mouse.x, a.y - mouse.y);
-        if (dm < 170 * DPR) {
-          ctx.strokeStyle = `rgba(167, 139, 250, ${(1 - dm / (170 * DPR)) * 0.35})`;
-          ctx.lineWidth = DPR * 0.7;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.stroke();
-        }
-        ctx.fillStyle = "rgba(190, 220, 255, 0.75)";
-        ctx.beginPath();
-        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      raf = requestAnimationFrame(draw);
-    };
-
-    resize();
-    draw();
-    // stop burning GPU once the hero is scrolled out of view
+    if (lite) return;
+    const video = ref.current;
+    if (!video) return;
+    video.playbackRate = 0.75;
     const io = new IntersectionObserver(([entry]) => {
-      const wasRunning = running;
-      running = entry.isIntersecting;
-      if (running && !wasRunning) draw();
-      if (!running) cancelAnimationFrame(raf);
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
     });
-    io.observe(canvas);
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", onMouse);
-    return () => {
-      running = false;
-      cancelAnimationFrame(raf);
-      io.disconnect();
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouse);
-    };
-  }, []);
-  return <canvas ref={ref} className="hero-canvas" aria-hidden="true" />;
+    io.observe(video);
+    return () => io.disconnect();
+  }, [lite]);
+  return (
+    <div className="hero-film" aria-hidden="true">
+      {lite ? (
+        <div
+          className="hero-film-poster"
+          style={{ backgroundImage: `url(${film.poster})` }}
+        />
+      ) : (
+        <video
+          ref={ref}
+          src={film.src}
+          poster={film.poster}
+          muted
+          loop
+          autoPlay
+          playsInline
+          preload="auto"
+        />
+      )}
+      <div className="hero-scrim" />
+    </div>
+  );
 }
 
 const fadeUp = {
@@ -166,9 +112,7 @@ export default function Hero() {
   const lite = useLiteMode();
   return (
     <section className="hero" id="top">
-      {!lite && <NeuralCanvas />}
-      <div className="hero-glow one" />
-      <div className="hero-glow two" />
+      <FilmBackdrop film={hero.film} lite={lite} />
       <div className="hero-inner">
         <motion.div initial="hidden" animate="show">
           <motion.div className="hero-badge" variants={fadeUp} custom={0}>

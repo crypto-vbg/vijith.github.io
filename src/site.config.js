@@ -35,6 +35,12 @@ export const SITE = {
 
   // ---- hero ----
   hero: {
+    // Full-bleed cinematic backdrop (the film this whole page is graded to match).
+    // Phones and reduced-motion get the lightweight poster frame instead.
+    film: {
+      src: "/media/night-ride.mp4",
+      poster: "/media/night-ride-poster.jpg",
+    },
     badge: "Building production AI at GSK · Bengaluru, India",
     titleFirst: "Vijith",
     titleAccent: "BG",
@@ -58,7 +64,7 @@ export const SITE = {
 
   // ---- about ----
   about: {
-    kicker: "01 · Who I am",
+    kicker: "Scene 01 · Who I am",
     title: "From ambiguous problem to *production AI*",
     paragraphs: [
       "I'm an AI Lead Engineer at GSK with 2.5+ years designing, architecting and delivering enterprise-scale Generative AI products — from concept to production.",
@@ -92,7 +98,7 @@ export const SITE = {
 
   // ---- experience ----
   experience: {
-    kicker: "02 · Experience",
+    kicker: "Scene 02 · Experience",
     title: "Enterprise AI, *shipped and adopted*",
     subtitle:
       "Every system below runs in production at GSK — used daily by finance, legal and commercial teams, compressing weeks of manual work into minutes.",
@@ -146,7 +152,7 @@ export const SITE = {
 
   // ---- projects (viz: constellation | loss | chat | commits) ----
   projects: {
-    kicker: "03 · Key projects & research",
+    kicker: "Scene 03 · Key projects & research",
     title: "Intelligent systems, *not just applications*",
     subtitle: "Research, fine-tuning and the AI running on this very page.",
     items: [
@@ -189,7 +195,7 @@ export const SITE = {
 
   // ---- skills ----
   skills: {
-    kicker: "04 · Capabilities",
+    kicker: "Scene 04 · Capabilities",
     title: "The *full stack* of modern AI engineering",
     subtitle:
       "From agent orchestration to eval harnesses to the cloud infrastructure it all runs on — one engineer, the whole lifecycle.",
@@ -229,7 +235,7 @@ export const SITE = {
 
   // ---- journey / beyond code ----
   journey: {
-    kicker: "05 · Beyond code",
+    kicker: "Scene 05 · Beyond code",
     titleLine1: "Some systems I debug.",
     titleLine2: "Some roads I just ride.",
     text: "When I'm not orchestrating agents, I'm leaning into hairpin bends on mountain roads. Motorcycles, long routes and high altitudes — that's where the best engineering ideas quietly arrive.",
@@ -243,7 +249,7 @@ export const SITE = {
 
   // ---- contact ----
   contact: {
-    kicker: "06 · Contact",
+    kicker: "Scene 06 · Contact",
     title: "Let's build something *intelligent*",
     subtitle:
       "Open to conversations about Generative AI, agentic systems and hard problems worth solving. Reach out on LinkedIn — or ask the AI assistant in the corner about my work first. I built it.",
@@ -256,7 +262,7 @@ export const SITE = {
   // ---- footer ----
   footer: {
     left: "© {year} Vijith BG · Bengaluru, India",
-    right: "designed & built with react, framer-motion & a lot of AI ✦",
+    right: "written, directed & engineered with react, framer-motion & a lot of AI ✦",
   },
 
   // ---- chatbot widget ----

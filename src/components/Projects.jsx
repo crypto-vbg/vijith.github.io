@@ -16,14 +16,14 @@ function Viz({ type }) {
           <line
             key={i}
             x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]}
-            stroke="rgba(125,211,252,0.35)" strokeWidth="1"
+            stroke="rgba(242,184,128,0.35)" strokeWidth="1"
             className="viz-edge" style={{ animationDelay: `${i * 0.25}s` }}
           />
         ))}
         {nodes.map(([x, y], i) => (
           <circle
             key={i} cx={x} cy={y} r={i % 3 === 0 ? 4 : 2.5}
-            fill={i % 2 ? "#7dd3fc" : "#a78bfa"}
+            fill={i % 2 ? "#f2b880" : "#e8875f"}
             className="viz-node" style={{ animationDelay: `${i * 0.2}s` }}
           />
         ))}
@@ -35,25 +35,25 @@ function Viz({ type }) {
       <svg viewBox="0 0 300 120" preserveAspectRatio="none" className="viz-svg">
         <path
           d="M10,18 C60,24 70,55 110,66 C150,77 170,88 200,94 C240,101 270,103 292,104"
-          fill="none" stroke="#a78bfa" strokeWidth="2.5" className="viz-draw"
+          fill="none" stroke="#e8875f" strokeWidth="2.5" className="viz-draw"
         />
         <path
           d="M10,40 C60,50 90,72 130,82 C170,92 220,99 292,103"
-          fill="none" stroke="rgba(125,211,252,0.55)" strokeWidth="1.5"
+          fill="none" stroke="rgba(242,184,128,0.55)" strokeWidth="1.5"
           strokeDasharray="4 5" className="viz-draw slow"
         />
-        <text x="16" y="16" fill="#5b6580" fontSize="9" fontFamily="JetBrains Mono">loss ↓ · +30% domain accuracy</text>
+        <text x="16" y="16" fill="#7a6c5a" fontSize="9" fontFamily="JetBrains Mono">loss ↓ · +30% domain accuracy</text>
       </svg>
     );
   }
   if (type === "chat") {
     return (
       <svg viewBox="0 0 300 120" className="viz-svg">
-        <rect x="18" y="16" rx="9" width="150" height="24" fill="rgba(125,211,252,0.14)" className="viz-bubble" />
-        <rect x="132" y="50" rx="9" width="150" height="24" fill="rgba(167,139,250,0.18)" className="viz-bubble d1" />
-        <rect x="18" y="84" rx="9" width="110" height="22" fill="rgba(125,211,252,0.14)" className="viz-bubble d2" />
-        <circle cx="272" cy="97" r="4" fill="#7dd3fc" className="viz-node" />
-        <circle cx="284" cy="97" r="4" fill="#a78bfa" className="viz-node" style={{ animationDelay: "0.3s" }} />
+        <rect x="18" y="16" rx="9" width="150" height="24" fill="rgba(242,184,128,0.14)" className="viz-bubble" />
+        <rect x="132" y="50" rx="9" width="150" height="24" fill="rgba(232,135,95,0.18)" className="viz-bubble d1" />
+        <rect x="18" y="84" rx="9" width="110" height="22" fill="rgba(242,184,128,0.14)" className="viz-bubble d2" />
+        <circle cx="272" cy="97" r="4" fill="#f2b880" className="viz-node" />
+        <circle cx="284" cy="97" r="4" fill="#e8875f" className="viz-node" style={{ animationDelay: "0.3s" }} />
       </svg>
     );
   }
@@ -68,7 +68,7 @@ function Viz({ type }) {
             <rect
               key={`${col}-${row}`}
               x={20 + col * 20} y={20 + row * 20} width="14" height="14" rx="3"
-              fill={on ? (seed > 7 ? "#7dd3fc" : "rgba(125,211,252,0.35)") : "rgba(255,255,255,0.06)"}
+              fill={on ? (seed > 7 ? "#f2b880" : "rgba(242,184,128,0.35)") : "rgba(255,240,224,0.06)"}
               className={on ? "viz-cell" : ""}
               style={{ animationDelay: `${(col + row) * 0.12}s` }}
             />
