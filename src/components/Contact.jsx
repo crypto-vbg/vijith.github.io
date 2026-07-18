@@ -8,9 +8,7 @@ export default function Contact() {
     <section id="contact">
       <div className="container contact-wrap">
         <Reveal>
-          <div className="kicker" style={{ justifyContent: "center" }}>
-            {contact.kicker}
-          </div>
+          <div className="kicker center">{contact.kicker}</div>
           <h2 className="section-title">
             <GradTitle text={contact.title} />
           </h2>

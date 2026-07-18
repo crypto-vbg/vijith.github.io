@@ -142,9 +142,7 @@ export default function Journey() {
         <Scene />
         <div className="journey-copy">
           <Reveal>
-            <div className="kicker" style={{ justifyContent: "center" }}>
-              {journey.kicker}
-            </div>
+            <div className="kicker center">{journey.kicker}</div>
             <h2 className="section-title">
               {journey.titleLine1}
               <br />

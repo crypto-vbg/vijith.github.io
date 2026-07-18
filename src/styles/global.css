@@ -25,7 +25,9 @@
   --max-w: 1160px;
 }
 
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -86,6 +88,20 @@ section {
   margin-bottom: 16px;
 }
 .kicker::before {
+  content: "";
+  width: 34px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+/* centered variant (Journey, Contact): mirror the dash so the label
+   sits on the true center line of the title below it */
+.kicker.center {
+  justify-content: center;
+}
+.kicker.center::before {
+  background: linear-gradient(90deg, transparent, var(--accent));
+}
+.kicker.center::after {
   content: "";
   width: 34px;
   height: 1px;
@@ -417,6 +433,12 @@ section {
     flex: 1 1 45%;
     border-bottom: 1px solid var(--border);
   }
+  .hero-stat:nth-child(2n) {
+    border-right: none;
+  }
+  .hero-stat:nth-last-child(-n + 2) {
+    border-bottom: none;
+  }
 }
 
 /* ------- about ------- */
@@ -424,7 +446,7 @@ section {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   gap: 56px;
-  align-items: start;
+  margin-top: 34px;
 }
 @media (max-width: 900px) {
   .about-grid {
@@ -487,6 +509,7 @@ section {
 .about-cards {
   display: grid;
   gap: 14px;
+  align-content: start;
 }
 .id-card {
   border: 1px solid var(--border);
@@ -1093,7 +1116,8 @@ footer {
     padding-left: 26px;
   }
   .xp-item::before {
-    left: -26px;
+    /* 12px dot centered on the 2px line at left 7–9px of the timeline */
+    left: -24px;
     width: 12px;
     height: 12px;
     border-width: 2.5px;
