@@ -1,6 +1,7 @@
 import Reveal from "./Reveal.jsx";
 import { SITE } from "../site.config.js";
 import { GradTitle } from "./text.jsx";
+import { TrendUpIcon } from "./Icons.jsx";
 
 export default function Experience() {
   const xp = SITE.experience;
@@ -29,7 +30,7 @@ export default function Experience() {
                     <span className="xp-role-tag">{item.tag}</span>
                   </div>
                   <h4 className="xp-title">{item.title}</h4>
-                  <span className="xp-impact">▲ {item.impact}</span>
+                  <span className="xp-impact"><TrendUpIcon size={13} /> {item.impact}</span>
                   <p className="xp-desc">{item.desc}</p>
                   <div className="chip-row">
                     {item.chips.map((c) => (

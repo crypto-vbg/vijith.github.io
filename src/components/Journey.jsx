@@ -1,5 +1,6 @@
 import Reveal from "./Reveal.jsx";
 import { SITE } from "../site.config.js";
+import { INTEREST_ICONS } from "./Icons.jsx";
 
 // Deterministic pseudo-random star field (stable across renders).
 const STARS = Array.from({ length: 90 }, (_, i) => {
@@ -155,15 +156,18 @@ export default function Journey() {
       </div>
       <div className="journey-interests">
         <div className="interest-grid">
-          {journey.interests.map((it, i) => (
+          {journey.interests.map((it, i) => {
+            const Icon = INTEREST_ICONS[it.emoji];
+            return (
             <Reveal key={it.title} delay={0.08 * i}>
               <div className="interest-card">
-                <span className="emoji">{it.emoji}</span>
+                <span className="emoji">{Icon ? <Icon size={32} /> : it.emoji}</span>
                 <b>{it.title}</b>
                 <span>{it.desc}</span>
               </div>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

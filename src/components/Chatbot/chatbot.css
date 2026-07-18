@@ -71,9 +71,8 @@
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #1c120b;
-  font-size: 18px;
+  background: #140b06;
+  border: 1px solid var(--border-strong);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,6 +95,46 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.cb-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot);
+  vertical-align: middle;
+  margin: -1px 2px 0 0;
+  animation: dotPulse 2.2s ease-out infinite;
+}
+@keyframes dotPulse {
+  0% { box-shadow: 0 0 0 0 var(--dot); }
+  70%, 100% { box-shadow: 0 0 0 5px transparent; }
+}
+
+/* ---- monogram (chat avatar + FAB) ---- */
+.mono-draw {
+  stroke-dasharray: 100;
+  animation: monoDraw 1.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes monoDraw {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+.mono-dot-a { animation: monoBlink 2.4s ease-in-out infinite; }
+.mono-dot-b { animation: monoBlink 2.4s ease-in-out 1.2s infinite; }
+@keyframes monoBlink {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.cb-hourglass {
+  vertical-align: -2px;
+  margin-right: 2px;
+  animation: hourFlip 2.4s ease-in-out infinite;
+}
+@keyframes hourFlip {
+  0%, 55% { transform: rotate(0deg); }
+  75%, 100% { transform: rotate(180deg); }
+}
 .cb-iconbtn {
   width: 30px;
   height: 30px;
@@ -110,6 +149,12 @@
 .cb-iconbtn:hover {
   color: var(--text);
   border-color: var(--border-strong);
+}
+.cb-iconbtn svg,
+.cb-send svg,
+.cb-fab svg {
+  display: block;
+  margin: auto;
 }
 
 /* ------- body / messages ------- */

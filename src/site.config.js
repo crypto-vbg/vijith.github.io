@@ -52,7 +52,7 @@ export const SITE = {
       "Forward Deployed Engineer at heart",
     ],
     description:
-      "I don't just build software — I build **intelligent, scalable AI systems**. From ambiguous business problem to production: multi-agent systems, enterprise RAG, NL-to-SQL analytics and LLM fine-tuning, shipped end to end with **security, evals and governance** built in.",
+      "I don't just build software I build **intelligent, scalable AI systems**. From ambiguous business problem to production: multi-agent systems, enterprise RAG, NL-to-SQL analytics and LLM fine-tuning, shipped end to end with **security, evals and governance** built in.",
     ctaSecondary: "Explore my work ↓",
     stats: [
       { value: "2.5+", label: "Years building enterprise GenAI" },
@@ -67,31 +67,36 @@ export const SITE = {
     kicker: "Scene 01 · Who I am",
     title: "From ambiguous problem to *production AI*",
     paragraphs: [
-      "I'm an AI Lead Engineer at GSK with 2.5+ years designing, architecting and delivering enterprise-scale Generative AI products — from concept to production.",
-      "My work spans the complete AI product lifecycle: solution architecture, agent design, backend and frontend engineering, deployment, evaluation and production operations. I've built multi-agent systems, enterprise RAG platforms, conversational NL-to-SQL analytics, LLM fine-tuning pipelines and AI governance frameworks — working with GPT, Claude and Gemini.",
-      "Beyond engineering, I lead cross-functional pods of UX designers, engineers, architects and product managers, partnering directly with Finance, Legal and Commercial stakeholders. The result: enterprise workflows that took weeks now run in minutes — with security, RBAC, Responsible AI compliance and observability built in from day one.",
+      "I'm an AI Lead Engineer at GSK with 2.5+ years designing, architecting and delivering enterprise-scale Generative AI products from concept to production.",
+      "My work spans the complete AI product lifecycle: solution architecture, agent design, backend and frontend engineering, deployment, evaluation and production operations. I've built multi-agent systems, enterprise RAG platforms, conversational NL-to-SQL analytics, LLM fine-tuning pipelines and AI governance frameworks working with GPT, Claude and Gemini.",
+      "Beyond engineering, I lead cross-functional pods of UX designers, engineers, architects and product managers, partnering directly with Finance, Legal and Commercial stakeholders. The result: enterprise workflows that took weeks now run in minutes with security, RBAC, Responsible AI compliance and observability built in from day one.",
       "Databricks Certified Generative AI Engineer · IEEE-published researcher · 4× Silver + Bronze awards at GSK.",
     ],
+    photo: {
+      src: "/media/profile.jpg",
+      alt: "Vijith in the mountains, pines and hazy ranges behind",
+      caption: "on location · where the ideas arrive",
+    },
     cards: [
       {
-        icon: "🧠",
+        icon: "network",
         title: "AI Engineer, end to end",
         desc: "Solution architecture → agent design → backend → frontend → deployment → evaluation → production ops.",
       },
       {
-        icon: "🤝",
+        icon: "partners",
         title: "Forward-deployed mindset",
         desc: "Partners directly with Finance, Legal, Commercial & Product stakeholders to turn ambiguous problems into shipped AI products.",
       },
       {
-        icon: "🛡️",
+        icon: "shield",
         title: "Responsible AI leader",
         desc: "Co-founded GSK's Global Functions Responsible AI Forum; enterprise security, RBAC and governance by default.",
       },
       {
-        icon: "⚡",
+        icon: "bolt",
         title: "AI-accelerated engineering",
-        desc: "Builds with GitHub Copilot and Claude Code daily — shipping production systems at unusual speed without cutting corners.",
+        desc: "Builds with GitHub Copilot and Claude Code daily shipping production systems at unusual speed without cutting corners.",
       },
     ],
   },
@@ -101,7 +106,7 @@ export const SITE = {
     kicker: "Scene 02 · Experience",
     title: "Enterprise AI, *shipped and adopted*",
     subtitle:
-      "Every system below runs in production at GSK — used daily by finance, legal and commercial teams, compressing weeks of manual work into minutes.",
+      "Every system below runs in production at GSK used daily by finance, legal and commercial teams, compressing weeks of manual work into minutes.",
     org: "GSK (GlaxoSmithKline)",
     period: "AI Lead Engineer, Global Functions · Jan 2024 — Present",
     items: [
@@ -130,7 +135,7 @@ export const SITE = {
         tag: "Builder",
         title: "Legal Document Intelligence (ICF)",
         impact: "~6 hours of legal review saved per document",
-        desc: "GenAI document intelligence verifying site-level Informed Consent Forms against the GSK master template — Azure AI Document Intelligence parsing, embedding + cosine-similarity section alignment in Azure AI Search, GPT-4o deviation flagging. Celery async jobs, reviewer comparison view with highlighted deviations, Key Vault, LangSmith tracing. Adopted by legal teams.",
+        desc: "GenAI document intelligence verifying site-level Informed Consent Forms against the GSK master template Azure AI Document Intelligence parsing, embedding + cosine-similarity section alignment in Azure AI Search, GPT-4o deviation flagging. Celery async jobs, reviewer comparison view with highlighted deviations, Key Vault, LangSmith tracing. Adopted by legal teams.",
         chips: ["Azure OpenAI", "Embeddings", "Celery", "Azure AI Search", "LangSmith", "Docker"],
       },
       {
@@ -168,14 +173,14 @@ export const SITE = {
       {
         tag: "LLM Fine-Tuning",
         title: "Domain-Specialized LLM: Breast-Cancer Q&A",
-        desc: "End-to-end supervised fine-tuning pipeline on Qwen2.5-1.5B — data prep through checkpointing — achieving +30% domain accuracy over base, with documented fine-tuning vs. RAG trade-offs.",
+        desc: "End-to-end supervised fine-tuning pipeline on Qwen2.5-1.5B data prep through checkpointing achieving +30% domain accuracy over base, with documented fine-tuning vs. RAG trade-offs.",
         chips: ["PyTorch", "Hugging Face", "SFT", "PEFT/LoRA"],
         viz: "loss",
       },
       {
         tag: "This Website",
         title: "Portfolio + AI Chatbot",
-        desc: "The site you're on: React + Framer Motion frontend, and a serverless chatbot grounded in my resume — sanitized content inlined as full-context grounding, answered by Gemini with streaming, rate limiting and a fair queue.",
+        desc: "The site you're on: React + Framer Motion frontend, and a serverless chatbot grounded in my resume sanitized content inlined as full-context grounding, answered by Gemini with streaming, rate limiting and a fair queue.",
         chips: ["React (Vite)", "Gemini", "Vercel Edge", "SSE"],
         link: "https://github.com/crypto-vbg/vijith.github.io",
         linkLabel: "View source →",
@@ -184,7 +189,7 @@ export const SITE = {
       {
         tag: "Open Source & Profile",
         title: "More on GitHub",
-        desc: "Experiments in agentic workflows, retrieval, evaluation harnesses and AI-accelerated development live on my GitHub — along with the code behind these projects.",
+        desc: "Experiments in agentic workflows, retrieval, evaluation harnesses and AI-accelerated development live on my GitHub along with the code behind these projects.",
         chips: ["Agents", "RAG", "Evals", "Python"],
         link: "https://github.com/crypto-vbg",
         linkLabel: "github.com/crypto-vbg →",
@@ -198,7 +203,7 @@ export const SITE = {
     kicker: "Scene 04 · Capabilities",
     title: "The *full stack* of modern AI engineering",
     subtitle:
-      "From agent orchestration to eval harnesses to the cloud infrastructure it all runs on — one engineer, the whole lifecycle.",
+      "From agent orchestration to eval harnesses to the cloud infrastructure it all runs on one engineer, the whole lifecycle.",
     groups: [
       {
         title: "Generative & Agentic AI",
@@ -238,12 +243,12 @@ export const SITE = {
     kicker: "Scene 05 · Beyond code",
     titleLine1: "Some systems I debug.",
     titleLine2: "Some roads I just ride.",
-    text: "When I'm not orchestrating agents, I'm leaning into hairpin bends on mountain roads. Motorcycles, long routes and high altitudes — that's where the best engineering ideas quietly arrive.",
+    text: "When I'm not orchestrating agents, I'm leaning into hairpin bends on mountain roads. Motorcycles, long routes and high altitudes that's where the best engineering ideas quietly arrive.",
     interests: [
-      { emoji: "🏍️", title: "Motorcycle Riding", desc: "Where the mind clears and ideas arrive." },
-      { emoji: "⛰️", title: "Mountain Adventures", desc: "Chasing hairpin bends and high-altitude views." },
-      { emoji: "🛣️", title: "Long Road Trips", desc: "The longer the route, the better the story." },
-      { emoji: "🌲", title: "Exploring Nature", desc: "Balance for a life spent among machines." },
+      { emoji: "bike", title: "Motorcycle Riding", desc: "Where the mind clears and ideas arrive." },
+      { emoji: "mountain", title: "Mountain Adventures", desc: "Chasing hairpin bends and high-altitude views." },
+      { emoji: "road", title: "Long Road Trips", desc: "The longer the route, the better the story." },
+      { emoji: "pine", title: "Exploring Nature", desc: "Balance for a life spent among machines." },
     ],
   },
 
@@ -252,7 +257,7 @@ export const SITE = {
     kicker: "Scene 06 · Contact",
     title: "Let's build something *intelligent*",
     subtitle:
-      "Open to conversations about Generative AI, agentic systems and hard problems worth solving. Reach out on LinkedIn — or ask the AI assistant in the corner about my work first. I built it.",
+      "Open to conversations about Generative AI, agentic systems and hard problems worth solving. Reach out on LinkedIn or ask the AI assistant in the corner about my work first. I built it.",
     buttons: [
       { label: "Connect on LinkedIn", href: "https://linkedin.com/in/vijith-bg", primary: true },
       { label: "GitHub", href: "https://github.com/crypto-vbg", primary: false },

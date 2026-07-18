@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { SITE } from "../site.config.js";
+import { MenuIcon, CloseIcon } from "./Icons.jsx";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -32,7 +33,7 @@ export default function Nav() {
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
           >
-            {menuOpen ? "✕" : "☰"}
+            {menuOpen ? <CloseIcon size={18} /> : <MenuIcon size={18} />}
           </button>
         </div>
       </div>

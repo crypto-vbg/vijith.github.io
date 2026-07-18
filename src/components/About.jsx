@@ -1,6 +1,7 @@
 import Reveal from "./Reveal.jsx";
 import { SITE } from "../site.config.js";
 import { GradTitle, RichText } from "./text.jsx";
+import { CARD_ICONS } from "./Icons.jsx";
 
 export default function About() {
   const { about } = SITE;
@@ -21,20 +22,32 @@ export default function About() {
                   <RichText text={p} />
                 </div>
               ))}
+              {about.photo && (
+                <figure className="about-photo">
+                  <img src={about.photo.src} alt={about.photo.alt} loading="lazy" />
+                  <figcaption>
+                    <span>{about.photo.caption}</span>
+                    <span>✦</span>
+                  </figcaption>
+                </figure>
+              )}
             </div>
           </Reveal>
           <div className="about-cards">
-            {about.cards.map((c, i) => (
+            {about.cards.map((c, i) => {
+              const Icon = CARD_ICONS[c.icon];
+              return (
               <Reveal key={c.title} delay={0.12 + i * 0.08}>
                 <div className="id-card">
-                  <span className="icon">{c.icon}</span>
+                  <span className="icon">{Icon ? <Icon /> : c.icon}</span>
                   <div>
                     <b>{c.title}</b>
                     <span>{c.desc}</span>
                   </div>
                 </div>
               </Reveal>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

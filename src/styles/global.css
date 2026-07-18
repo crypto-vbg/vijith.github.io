@@ -440,6 +440,50 @@ section {
   color: var(--muted);
   margin-bottom: 20px;
 }
+/* film-still portrait — graded to match the ride footage */
+.about-photo {
+  position: relative;
+  margin: 28px 0 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.about-photo:hover img {
+  transform: scale(1.03);
+}
+.about-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(8, 6, 5, 0) 52%, rgba(8, 6, 5, 0.6) 100%),
+    linear-gradient(115deg, rgba(242, 184, 128, 0.14), rgba(232, 135, 95, 0.05) 45%, rgba(8, 6, 5, 0.18));
+}
+.about-photo figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffd9a0;
+}
+
 .about-cards {
   display: grid;
   gap: 14px;
@@ -463,6 +507,9 @@ section {
   font-size: 22px;
   line-height: 1;
   margin-top: 3px;
+}
+.id-card .icon svg {
+  display: block;
 }
 .id-card b {
   display: block;
@@ -551,6 +598,10 @@ section {
   font-weight: 600;
   color: var(--green);
   margin-bottom: 12px;
+}
+.xp-impact svg {
+  vertical-align: -2px;
+  margin-right: 2px;
 }
 .xp-desc {
   color: var(--muted);
@@ -796,6 +847,10 @@ section {
   display: block;
   margin-bottom: 12px;
 }
+.interest-card .emoji svg {
+  display: block;
+  margin: 0 auto;
+}
 .interest-card b {
   display: block;
   font-family: var(--font-display);
@@ -973,6 +1028,10 @@ footer {
   color: var(--text);
   font-size: 17px;
   line-height: 1;
+}
+.nav-burger svg {
+  display: block;
+  margin: auto;
 }
 .nav-mobile {
   list-style: none;

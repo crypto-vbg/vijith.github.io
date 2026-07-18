@@ -2,16 +2,24 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Markdown from "./Markdown.jsx";
 import { SITE } from "../../site.config.js";
+import {
+  Monogram,
+  CloseIcon,
+  ResetIcon,
+  SendIcon,
+  StopIcon,
+  HourglassIcon,
+} from "../Icons.jsx";
 import "./chatbot.css";
 
 const SUGGESTED = SITE.chatbot.suggestedQuestions;
 const QUEUE_MESSAGES = SITE.chatbot.queueMessages;
 
 const STATUS_META = {
-  available: { icon: "🟢", label: "Available", hint: "Responses are immediate" },
-  busy: { icon: "🟡", label: "Busy", hint: "Short queue · ~30–60s waits possible" },
-  high: { icon: "🔴", label: "High Demand", hint: "Longer waits · queue active" },
-  unknown: { icon: "⚪", label: "Checking…", hint: "Fetching availability" },
+  available: { color: "var(--green)", label: "Available", hint: "Responses are immediate" },
+  busy: { color: "var(--amber)", label: "Busy", hint: "Short queue · ~30–60s waits possible" },
+  high: { color: "var(--red)", label: "High Demand", hint: "Longer waits · queue active" },
+  unknown: { color: "var(--faint)", label: "Checking…", hint: "Fetching availability" },
 };
 
 const STORAGE_KEY = "vijith-chat-history";
@@ -220,18 +228,21 @@ export default function Chatbot() {
           >
             {/* header */}
             <div className="cb-header">
-              <div className="cb-avatar">✦</div>
+              <div className="cb-avatar">
+                <Monogram size={30} />
+              </div>
               <div className="cb-headtext">
                 <b>{SITE.chatbot.title}</b>
                 <span className="cb-status" title={meta.hint}>
-                  {meta.icon} {meta.label} · {meta.hint}
+                  <i className="cb-dot" style={{ "--dot": meta.color }} /> {meta.label} ·{" "}
+                  {meta.hint}
                 </span>
               </div>
               <button className="cb-iconbtn" title="Clear conversation" onClick={clearChat}>
-                ⟲
+                <ResetIcon size={15} />
               </button>
               <button className="cb-iconbtn" title="Close" onClick={() => setOpen(false)}>
-                ✕
+                <CloseIcon size={15} />
               </button>
             </div>
 
@@ -260,7 +271,8 @@ export default function Chatbot() {
                 <div className="cb-queue">
                   <div className="cb-queue-head">
                     <span>
-                      ⏳ Queue position <b>#{queue.position}</b>
+                      <HourglassIcon size={13} className="cb-hourglass" /> Queue position{" "}
+                      <b>#{queue.position}</b>
                     </span>
                     <span>~{queue.remaining}s</span>
                   </div>
@@ -302,7 +314,7 @@ export default function Chatbot() {
               />
               {busy ? (
                 <button className="cb-send stop" onClick={stop} title="Stop">
-                  ■
+                  <StopIcon size={16} />
                 </button>
               ) : (
                 <button
@@ -311,7 +323,7 @@ export default function Chatbot() {
                   disabled={!input.trim()}
                   title="Send"
                 >
-                  ➤
+                  <SendIcon size={17} />
                 </button>
               )}
             </div>
@@ -327,7 +339,7 @@ export default function Chatbot() {
         whileTap={{ scale: 0.94 }}
         aria-label={open ? "Close chat" : "Chat with Vijith's AI assistant"}
       >
-        {open ? "✕" : "✦"}
+        {open ? <CloseIcon size={22} /> : <Monogram size={34} dark />}
         {!open && <span className="cb-fab-ring" />}
       </motion.button>
     </>

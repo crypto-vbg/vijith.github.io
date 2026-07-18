@@ -25,3 +25,6 @@ resume/
 
 # raw AI-video source (served copy lives in public/media)
 video/
+
+# raw profile photo source (served copy lives in public/media)
+profile_image/
