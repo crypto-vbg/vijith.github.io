@@ -27,12 +27,14 @@ let primaryExhaustedUntil = 0; // per-isolate: skip doomed primary calls briefly
 
 const limiter = createLimiter();
 
-function availabilityStatus({ used, capacity, backoffMs, retryAfterSec }) {
-  if (backoffMs > 0 || used >= capacity) {
-    return { status: "high", used, capacity, retryAfter: retryAfterSec ?? 30 };
+// Public availability signal — deliberately omits internals (backend type,
+// model names, capacity numbers) so abusers can't profile the limiter.
+function availabilityStatus({ used, capacity, dayUsed, dayCapacity, backoffMs, retryAfterSec }) {
+  if (backoffMs > 0 || used >= capacity || dayUsed >= dayCapacity) {
+    return { status: "high", retryAfter: retryAfterSec ?? 30 };
   }
-  if (used >= capacity * 0.6) return { status: "busy", used, capacity };
-  return { status: "available", used, capacity };
+  if (used >= capacity * 0.6) return { status: "busy" };
+  return { status: "available" };
 }
 
 function clientIp(request) {
@@ -47,31 +49,48 @@ const QUEUE_COPY = {
   backoff: "The AI provider is at capacity. You're in the queue.",
   global: "The assistant is at capacity right now. You're in the queue.",
   ip: "You've sent quite a few messages this minute — a short pause keeps things fair for other visitors.",
+  "global-day":
+    "The assistant has reached its daily capacity. Please come back tomorrow — or reach Vijith on LinkedIn.",
+  "ip-day":
+    "You've reached today's message limit. Please come back tomorrow — or reach Vijith on LinkedIn.",
 };
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+// The site calls this API same-origin, so cross-origin browser access is only
+// ever granted to these origins (localhost for `npm run dev`). Anything else
+// gets no CORS headers and the browser blocks the response.
+const ALLOWED_ORIGINS = new Set([
+  "https://vijith-bg.vercel.app",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+]);
 
-function json(body, status = 200, headers = {}) {
+function corsHeaders(request) {
+  const origin = request.headers.get("origin");
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) return {};
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    Vary: "Origin",
+  };
+}
+
+function jsonResponse(body, status, headers) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...CORS, ...headers },
+    headers: { "Content-Type": "application/json", ...headers },
   });
 }
 
 export default async function handler(request) {
-  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  const cors = corsHeaders(request);
+  const json = (body, status = 200, headers = {}) =>
+    jsonResponse(body, status, { ...cors, ...headers });
+
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
 
   if (request.method === "GET") {
-    return json({
-      ...availabilityStatus(await limiter.peek()),
-      backend: limiter.backend,
-      model: GEN_MODEL,
-      fallbackModel: FALLBACK_MODEL,
-    });
+    return json(availabilityStatus(await limiter.peek()));
   }
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
@@ -224,7 +243,7 @@ export default async function handler(request) {
         "Cache-Control": "no-cache, no-transform",
         Connection: "keep-alive",
         "X-Chat-Model": servedBy,
-        ...CORS,
+        ...cors,
       },
     });
   } catch (err) {

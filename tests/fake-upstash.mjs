@@ -57,6 +57,22 @@ export function createFakeUpstash() {
         strings.set(key, { value, expireAt: Date.now() + Number(ms) });
         return "OK";
       }
+      case "GET": {
+        const entry = strings.get(args[0]);
+        return entry ? entry.value : null;
+      }
+      case "INCR": {
+        const entry = strings.get(args[0]);
+        const next = Number(entry?.value ?? 0) + 1;
+        strings.set(args[0], { value: String(next), expireAt: entry?.expireAt ?? Infinity });
+        return next;
+      }
+      case "DECR": {
+        const entry = strings.get(args[0]);
+        const next = Number(entry?.value ?? 0) - 1;
+        strings.set(args[0], { value: String(next), expireAt: entry?.expireAt ?? Infinity });
+        return next;
+      }
       default:
         throw new Error(`fake redis: unsupported command ${cmd}`);
     }

@@ -8,7 +8,7 @@ import {
 } from "../api/_lib/ratelimit.js";
 import { createFakeUpstash } from "./fake-upstash.mjs";
 
-const LIMITS = { capacity: 5, perIp: 2 };
+const LIMITS = { capacity: 5, perIp: 2, dailyCapacity: 1000, perIpDay: 100 };
 
 // ---------- MemoryWindow ----------
 
@@ -54,6 +54,38 @@ test("memory: provider backoff blocks everyone until it expires", () => {
   assert.equal(rejected.reason, "backoff");
   assert.equal(rejected.retryAfterSec, 29);
   assert.equal(w.take("a", LIMITS, t + 31_000).ok, true);
+});
+
+test("memory: per-ip daily cap rejects and resets on the next UTC day", () => {
+  const limits = { capacity: 100, perIp: 100, dailyCapacity: 1000, perIpDay: 2 };
+  const w = new MemoryWindow();
+  const t = Date.UTC(2026, 0, 1, 12, 0, 0); // noon, so +13h crosses midnight
+  // Spread past the minute window so only the daily cap is in play.
+  assert.equal(w.take("a", limits, t).ok, true);
+  assert.equal(w.take("a", limits, t + 2 * WINDOW_MS).ok, true);
+  const rejected = w.take("a", limits, t + 4 * WINDOW_MS);
+  assert.equal(rejected.ok, false);
+  assert.equal(rejected.reason, "ip-day");
+  assert.ok(rejected.retryAfterSec > 60); // points at the day reset, not the minute window
+  // another visitor is unaffected
+  assert.equal(w.take("b", limits, t + 4 * WINDOW_MS).ok, true);
+  // next UTC day: fresh budget
+  assert.equal(w.take("a", limits, t + 13 * 3_600_000).ok, true);
+});
+
+test("memory: global daily cap rejects fresh visitors once exhausted", () => {
+  const limits = { capacity: 100, perIp: 100, dailyCapacity: 2, perIpDay: 100 };
+  const w = new MemoryWindow();
+  const t = Date.UTC(2026, 0, 1, 12, 0, 0);
+  assert.equal(w.take("a", limits, t).ok, true);
+  assert.equal(w.take("b", limits, t + 2 * WINDOW_MS).ok, true);
+  const rejected = w.take("c", limits, t + 4 * WINDOW_MS);
+  assert.equal(rejected.ok, false);
+  assert.equal(rejected.reason, "global-day");
+  // peek reflects daily exhaustion
+  const seen = w.peek(limits, t + 4 * WINDOW_MS);
+  assert.equal(seen.dayUsed, 2);
+  assert.ok(seen.retryAfterSec > 60);
 });
 
 // ---------- RedisWindow (against the fake Upstash) ----------
@@ -115,6 +147,25 @@ test("redis: peek reports usage without consuming a slot", async () => {
   assert.equal((await w.peek(LIMITS, t + 3)).used, 2);
 });
 
+test("redis: daily cap is enforced and the counters roll back on rejection", async () => {
+  const limits = { capacity: 100, perIp: 100, dailyCapacity: 2, perIpDay: 100 };
+  const { fetchImpl, strings } = createFakeUpstash();
+  const w = new RedisWindow("https://fake.upstash.io", "tok", fetchImpl);
+  const t = Date.UTC(2026, 0, 1, 12, 0, 0);
+  assert.equal((await w.take("a", limits, t)).ok, true);
+  assert.equal((await w.take("b", limits, t + 1)).ok, true);
+  const rejected = await w.take("c", limits, t + 2);
+  assert.equal(rejected.ok, false);
+  assert.equal(rejected.reason, "global-day");
+  // rolled back: the day counter still holds exactly `dailyCapacity`
+  const dayKey = [...strings.keys()].find((k) => k.startsWith("chat:rl:day:global:"));
+  assert.equal(Number(strings.get(dayKey).value), limits.dailyCapacity);
+  // and peek reports daily exhaustion
+  const seen = await w.peek(limits, t + 3);
+  assert.equal(seen.dayUsed, 2);
+  assert.ok(seen.retryAfterSec > 60);
+});
+
 // ---------- createLimiter wiring ----------
 
 test("createLimiter: no redis env → memory backend with env-tuned limits", async () => {
@@ -149,4 +200,6 @@ test("createLimiter: invalid env values fall back to defaults", () => {
   const limiter = createLimiter({ CHAT_RPM: "not-a-number", CHAT_RPM_PER_IP: "-5" });
   assert.equal(limiter.limits.capacity, 60);
   assert.equal(limiter.limits.perIp, 1); // clamped to minimum
+  assert.equal(limiter.limits.dailyCapacity, 1000);
+  assert.equal(limiter.limits.perIpDay, 100);
 });

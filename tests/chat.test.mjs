@@ -7,6 +7,8 @@ import assert from "node:assert/strict";
 process.env.GEMINI_API_KEY = "test-key";
 process.env.CHAT_RPM = "5";
 process.env.CHAT_RPM_PER_IP = "2";
+process.env.CHAT_RPD = "1000";
+process.env.CHAT_RPD_PER_IP = "100";
 
 const { default: handler } = await import("../api/chat.js");
 
@@ -53,13 +55,35 @@ async function readSse(res) {
   return out;
 }
 
-test("GET reports availability and backend", async () => {
+test("GET reports availability without leaking limiter internals", async () => {
   const res = await handler(new Request("http://localhost/api/chat"));
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.equal(body.status, "available");
-  assert.equal(body.backend, "memory");
-  assert.equal(body.capacity, 5);
+  // internals must not be exposed to visitors
+  assert.ok(!("backend" in body));
+  assert.ok(!("capacity" in body));
+  assert.ok(!("model" in body));
+  assert.ok(!("fallbackModel" in body));
+});
+
+test("CORS: allowed origin is echoed, unknown origin gets no CORS headers", async () => {
+  const allowed = await handler(
+    new Request("http://localhost/api/chat", {
+      headers: { origin: "https://vijith-bg.vercel.app" },
+    })
+  );
+  assert.equal(
+    allowed.headers.get("access-control-allow-origin"),
+    "https://vijith-bg.vercel.app"
+  );
+
+  const denied = await handler(
+    new Request("http://localhost/api/chat", {
+      headers: { origin: "https://evil.example.com" },
+    })
+  );
+  assert.equal(denied.headers.get("access-control-allow-origin"), null);
 });
 
 test("invalid JSON body → 400 without burning a slot", async () => {
