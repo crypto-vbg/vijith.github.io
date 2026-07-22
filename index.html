@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="TEU9njv_5MMi4NR__1nOZDCxV45MPzDpEYa3W0w_tPs" />
-    <meta name="description" content="Vijith BG — AI Lead Engineer. I design, build, and ship production-grade Generative AI systems end to end." />
-    <meta name="theme-color" content="#080605" />
+    <meta name="description" content="Vijith BG — AI Lead Engineer. I design, architect, and ship enterprise Generative AI systems end to end." />
+    <meta name="theme-color" content="#efe7d9" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Vijith BG — AI Lead Engineer" />
-    <meta property="og:description" content="I design, build, and ship production-grade Generative AI systems end to end." />
+    <meta property="og:description" content="I design, architect, and ship enterprise Generative AI systems end to end." />
     <meta property="og:url" content="https://vijith-bg.vercel.app/" />
     <meta property="og:image" content="https://vijith-bg.vercel.app/media/profile.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Vijith BG — AI Lead Engineer" />
-    <meta name="twitter:description" content="I design, build, and ship production-grade Generative AI systems end to end." />
+    <meta name="twitter:description" content="I design, architect, and ship enterprise Generative AI systems end to end." />
     <meta name="twitter:image" content="https://vijith-bg.vercel.app/media/profile.jpg" />
     <title>Vijith BG AI Lead Engineer</title>
     <link rel="canonical" href="https://vijith-bg.vercel.app/" />
@@ -25,7 +25,7 @@
         "url": "https://vijith-bg.vercel.app/",
         "image": "https://vijith-bg.vercel.app/media/profile.jpg",
         "jobTitle": "AI Lead Engineer",
-        "description": "AI Lead Engineer. I design, build, and ship production-grade Generative AI systems end to end.",
+        "description": "AI Lead Engineer. I design, architect, and ship enterprise Generative AI systems end to end.",
         "sameAs": [
           "https://www.linkedin.com/in/vijith-bg"
         ]
@@ -34,13 +34,537 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root{
+        --paper:#efe7d9; --paper-2:#e7ddca; --card:#faf5ea; --ink:#241f18; --ink-2:#6a6152;
+        --line:#d8ccb4; --accent:#c25a26; --accent-2:#3f6f4f; --shadow:rgba(60,45,25,.16);
+        --disp:'Bricolage Grotesque',system-ui,sans-serif; --body:'Hanken Grotesk',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+      }
+      *{box-sizing:border-box}
+      body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;line-height:1.55}
+      h1,h2,h3{font-family:var(--disp);margin:0;line-height:.98;letter-spacing:-.02em;font-weight:700}
+      p{margin:0}
+      a{color:var(--accent);text-decoration:none}
+      a:hover{color:#9c4319}
+      ::selection{background:var(--accent);color:#fff}
+      img{max-width:100%}
+      @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+      @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+      @keyframes travel{0%{top:0;opacity:0}8%{opacity:1}92%{opacity:1}100%{top:100%;opacity:0}}
+      @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+      @keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,4vh) scale(1.14)}}
+      @keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,-4vh) scale(1.12)}}
+      @keyframes targetPop{0%{transform:translateY(8px);opacity:.35}100%{transform:none;opacity:1}}
+      @keyframes chatPop{0%{opacity:0;transform:translateY(18px) scale(.92)}60%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1)}}
+      @keyframes msgIn{0%{opacity:0;transform:translateY(10px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+      @keyframes dotBounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+      @keyframes fabRing{0%{transform:scale(.9);opacity:.55}70%{transform:scale(2.4);opacity:0}100%{transform:scale(2.4);opacity:0}}
+      @keyframes fabDot{0%,100%{transform:scale(1)}50%{transform:scale(.55)}}
+      /* chat widget interaction states (inline style-hover/active from the design → real CSS) */
+      #chat-fab{transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s ease}
+      #chat-fab:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 18px 40px var(--shadow)}
+      #chat-fab:active{transform:translateY(-1px) scale(.98)}
+      #chat-send{transition:transform .18s cubic-bezier(.2,.8,.2,1),filter .18s ease}
+      #chat-send:hover{transform:scale(1.1);filter:brightness(1.08)}
+      #chat-send:active{transform:scale(.92)}
+      html{scroll-behavior:smooth}
+      section[id]{scroll-margin-top:78px}
+      section:target h2{animation:targetPop .55s cubic-bezier(.2,.7,.2,1)}
+      /* responsive: collapse the fixed 2-column grids on smaller screens */
+      @media (max-width:860px){
+        .hero-grid,.about-grid,.exp-grid{grid-template-columns:1fr!important}
+        .hero-media{min-height:360px!important;margin-top:12px}
+        .nav-links{gap:14px!important;flex-wrap:wrap;justify-content:flex-end}
+      }
+      @media (max-width:560px){
+        .nav-links a[data-nav-num]{display:none}
+      }
+      @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001s!important}}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="app-root" style="position:relative;overflow:hidden">
+
+      <!-- animated topographic background -->
+      <div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+        <div data-bg-topo style="position:absolute;inset:-12%;opacity:.5;background-image:repeating-radial-gradient(circle at 18% 12%, transparent 0 46px, rgba(120,95,55,.09) 46px 47px, transparent 47px 96px),repeating-radial-gradient(circle at 88% 78%, transparent 0 54px, rgba(120,95,55,.08) 54px 55px, transparent 55px 110px);will-change:transform"></div>
+        <div style="position:absolute;width:62vw;height:62vw;left:-16vw;top:-12vw;border-radius:50%;background:radial-gradient(circle,rgba(194,90,38,.13),transparent 70%);animation:drift1 26s ease-in-out infinite;will-change:transform"></div>
+        <div style="position:absolute;width:56vw;height:56vw;right:-16vw;bottom:-12vw;border-radius:50%;background:radial-gradient(circle,rgba(63,111,79,.11),transparent 70%);animation:drift2 32s ease-in-out infinite;will-change:transform"></div>
+      </div>
+
+      <div style="position:relative;z-index:1">
+
+      <!-- ============ NAV ============ -->
+      <header style="position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);background:rgba(239,231,217,.78);border-bottom:1px solid var(--line)">
+        <div style="max-width:1120px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+          <a href="#top" style="display:flex;align-items:center;gap:9px;color:var(--ink)">
+            <span style="font-family:var(--disp);font-weight:800;font-size:19px;letter-spacing:-.03em">△ VBG</span>
+            <span style="font-family:var(--mono);font-size:9.5px;color:var(--ink-2);letter-spacing:.06em">12.97°N 77.59°E</span>
+          </a>
+          <nav class="nav-links" style="display:flex;align-items:center;gap:22px;font-family:var(--mono);font-size:11.5px;letter-spacing:.02em">
+            <a href="#about" data-nav-num style="color:var(--ink-2)">01 · About</a>
+            <a href="#work" data-nav-num style="color:var(--ink-2)">02 · Work</a>
+            <a href="#skills" data-nav-num style="color:var(--ink-2)">03 · Kit</a>
+            <a href="#experience" data-nav-num style="color:var(--ink-2)">04 · Route</a>
+            <a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:var(--ink);color:var(--paper);padding:8px 15px;border-radius:999px;font-weight:600">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <!-- ============ HERO ============ -->
+      <section id="top" style="max-width:1120px;margin:0 auto;padding:64px 28px 40px">
+        <div class="hero-grid" style="display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center">
+          <!-- left -->
+          <div>
+            <div style="display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--accent);border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:999px;margin-bottom:22px">
+              <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:floaty 3s ease-in-out infinite"></span>ENGINEERING AT ALTITUDE
+            </div>
+            <h1 style="font-size:clamp(52px,8vw,96px);font-weight:800">Vijith BG</h1>
+            <div style="font-family:var(--disp);font-size:clamp(20px,2.6vw,30px);font-weight:600;color:var(--accent);margin-top:6px;letter-spacing:-.02em">AI&nbsp;Lead&nbsp;Engineer</div>
+            <p style="max-width:33em;font-size:17.5px;color:var(--ink-2);margin-top:20px">
+              I design, architect, and ship enterprise <strong style="color:var(--ink);font-weight:600">Generative AI</strong>, from an ambiguous business problem to a production system. Multi-agent platforms, RAG, NL-to-SQL, LLMOps, and the small teams that build them.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px">
+              <a href="#work" style="display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;padding:13px 22px;border-radius:999px;font-weight:600;font-size:15px;box-shadow:0 8px 22px rgba(194,90,38,.28)">Explore the trail <span>→</span></a>
+              <a href="https://linkedin.com/in/vijith-bg" style="display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--ink);padding:13px 22px;border-radius:999px;font-weight:600;font-size:15px;border:1.5px solid var(--ink)">Connect on LinkedIn ↗</a>
+            </div>
+            <div style="display:flex;gap:20px;margin-top:28px;font-family:var(--mono);font-size:12px;color:var(--ink-2)">
+              <a href="https://linkedin.com/in/vijith-bg" style="color:var(--ink-2)">linkedin ↗</a>
+              <a href="https://github.com/crypto-vbg" style="color:var(--ink-2)">github ↗</a>
+            </div>
+          </div>
+          <!-- right : polaroid + draggable stickers -->
+          <div class="hero-media" style="position:relative;min-height:400px;display:flex;align-items:center;justify-content:center">
+            <div style="position:relative;transform:rotate(-3deg);background:#fff;padding:14px 14px 46px;border-radius:6px;box-shadow:0 18px 40px var(--shadow);border:1px solid rgba(0,0,0,.05)">
+              <div style="width:280px;height:330px;overflow:hidden;background:var(--paper-2)">
+                <img src="/media/profilepic2.jpg" alt="Vijith BG" style="width:100%;height:100%;object-fit:cover;display:block" />
+              </div>
+              <div style="position:absolute;left:0;right:0;bottom:13px;text-align:center;font-family:var(--mono);font-size:11px;color:#8a8272;letter-spacing:.05em">VIJITH · BENGALURU ↔ THE HILLS</div>
+            </div>
+            <!-- draggable stickers -->
+            <div data-stickers style="position:absolute;inset:0;pointer-events:none">
+              <div data-drag data-rot="-8deg" style="pointer-events:auto;position:absolute;top:-6px;right:-4px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;padding:8px 12px;border-radius:8px;box-shadow:0 8px 18px var(--shadow)">🏍 TRIUMPH · SPEED&nbsp;400</div>
+              <div data-drag data-rot="7deg" style="pointer-events:auto;position:absolute;bottom:24px;left:-18px;background:var(--accent-2);color:#fff;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;padding:8px 12px;border-radius:8px;box-shadow:0 8px 18px var(--shadow)">△ ELEV 2100 M</div>
+              <div data-drag data-rot="-4deg" style="pointer-events:auto;position:absolute;bottom:-10px;right:12px;background:var(--card);color:var(--ink);border:1.5px solid var(--ink);font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;padding:7px 11px;border-radius:8px;box-shadow:0 8px 18px var(--shadow)">DRAG&nbsp;ME ✦</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:44px;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);letter-spacing:.1em">
+          <span style="animation:bob 2s ease-in-out infinite">↓</span> SCROLL TO BEGIN THE ASCENT
+          <span style="flex:1;height:1px;background:var(--line)"></span>
+        </div>
+      </section>
+
+      <!-- ============ MARQUEE ============ -->
+      <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink);color:var(--paper);overflow:hidden;padding:13px 0">
+        <div style="display:flex;width:max-content;animation:marquee 32s linear infinite;font-family:var(--mono);font-size:13px;letter-spacing:.04em">
+          <div style="display:flex;gap:26px;padding-right:26px">
+            <span>AGENTIC AI</span><span style="color:var(--accent)">◆</span><span>MULTI-AGENT SYSTEMS</span><span style="color:var(--accent)">◆</span><span>RAG &amp; GRAPHRAG</span><span style="color:var(--accent)">◆</span><span>NL-TO-SQL</span><span style="color:var(--accent)">◆</span><span>LLM FINE-TUNING</span><span style="color:var(--accent)">◆</span><span>LLMOPS</span><span style="color:var(--accent)">◆</span><span>FASTAPI + REACT</span><span style="color:var(--accent)">◆</span><span>RESPONSIBLE AI</span><span style="color:var(--accent)">◆</span>
+          </div>
+          <div style="display:flex;gap:26px;padding-right:26px" aria-hidden="true">
+            <span>AGENTIC AI</span><span style="color:var(--accent)">◆</span><span>MULTI-AGENT SYSTEMS</span><span style="color:var(--accent)">◆</span><span>RAG &amp; GRAPHRAG</span><span style="color:var(--accent)">◆</span><span>NL-TO-SQL</span><span style="color:var(--accent)">◆</span><span>LLM FINE-TUNING</span><span style="color:var(--accent)">◆</span><span>LLMOPS</span><span style="color:var(--accent)">◆</span><span>FASTAPI + REACT</span><span style="color:var(--accent)">◆</span><span>RESPONSIBLE AI</span><span style="color:var(--accent)">◆</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ ABOUT ============ -->
+      <section id="about" style="max-width:1120px;margin:0 auto;padding:84px 28px">
+        <div data-reveal style="display:flex;align-items:baseline;gap:14px;margin-bottom:34px">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">01</span>
+          <h2 style="font-size:clamp(30px,4vw,46px)">About the rider</h2>
+          <span style="flex:1;height:1px;background:var(--line)"></span>
+        </div>
+        <div class="about-grid" style="display:grid;grid-template-columns:1.3fr .7fr;gap:48px;align-items:start">
+          <div data-reveal>
+            <p style="font-size:19px;max-width:38em">
+              I'm an AI Lead Engineer with <strong>2.5+ years</strong> designing and delivering enterprise-scale Generative AI from concept to production. At <strong>GSK</strong>, I lead AI platforms end to end, partnering directly with Finance, Legal, Commercial, and Product to turn ambiguous problems into secure, scalable systems.
+            </p>
+            <p style="font-size:19px;max-width:38em;margin-top:18px;color:var(--ink-2)">
+              My work spans the whole lifecycle: solution architecture, agent design, backend and frontend engineering, deployment, evaluation, and production operations. Multi-agent systems, enterprise RAG, conversational analytics, fine-tuning pipelines, and AI governance: shipped, monitored, and owned.
+            </p>
+            <p style="font-size:19px;max-width:38em;margin-top:18px;color:var(--ink-2)">
+              Off the clock I'm chasing altitude on my <strong style="color:var(--ink)">Triumph Speed 400</strong>. The same instinct shows up in how I build: pick a hard route, plan the switchbacks, keep moving until the summit. Databricks-certified GenAI Engineer and IEEE-published researcher.
+            </p>
+          </div>
+          <!-- stat stack -->
+          <div data-reveal style="display:flex;flex-direction:column;gap:12px">
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+              <div style="font-family:var(--disp);font-weight:800;font-size:40px;color:var(--accent)"><span data-count="2.5" data-dec="1" data-suffix="+">0</span></div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.04em">YEARS SHIPPING GENAI</div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+              <div style="font-family:var(--disp);font-weight:800;font-size:40px;color:var(--accent)"><span data-count="6" data-suffix="+">0</span></div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.04em">PRODUCTION AI SYSTEMS</div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+              <div style="font-family:var(--disp);font-weight:800;font-size:40px;color:var(--accent)"><span data-count="83">0</span></div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.04em">AI USE CASES GOVERNED</div>
+            </div>
+            <div style="background:var(--ink);color:var(--paper);border-radius:14px;padding:18px 20px">
+              <div style="font-family:var(--disp);font-weight:800;font-size:40px"><span data-count="4" data-suffix="×">0</span></div>
+              <div style="font-family:var(--mono);font-size:11px;opacity:.7;letter-spacing:.04em">GSK SILVER AWARDS WON</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ WORK / TRAIL ============ -->
+      <section id="work" style="background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+       <div style="max-width:1120px;margin:0 auto;padding:84px 28px">
+        <div data-reveal style="display:flex;align-items:baseline;gap:14px;margin-bottom:12px">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">02</span>
+          <h2 style="font-size:clamp(30px,4vw,46px)">The trail: featured work</h2>
+          <span style="flex:1;height:1px;background:var(--line)"></span>
+        </div>
+        <p data-reveal style="font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.05em;margin-bottom:44px">SEVEN WAYPOINTS · SHIPPED AT GSK, PLUS PERSONAL RESEARCH</p>
+
+        <!-- route -->
+        <div style="position:relative;padding-left:0">
+          <div style="position:absolute;left:26px;top:6px;bottom:6px;width:2px;background:repeating-linear-gradient(var(--accent) 0 8px, transparent 8px 16px)"></div>
+          <div style="position:absolute;left:20px;width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--paper-2);animation:travel 9s linear infinite"></div>
+
+          <!-- WP-01 -->
+          <div data-reveal style="position:relative;padding-left:64px;margin-bottom:26px">
+            <div style="position:absolute;left:19px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent)"></div>
+            <div data-tilt style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 6px 18px var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+                <span style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em">WP-01 · PRODUCT &amp; LEAD ENGINEER</span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">~1 WEEK → MINUTES</span>
+              </div>
+              <h3 style="font-size:26px;margin-top:10px">ViiV Finance Commentary Tool</h3>
+              <p style="color:var(--ink-2);font-size:16px;margin-top:10px;max-width:60em">
+                Led a 4-person cross-functional pod (UX, UI, architecture, PM) to ship a secure, role-aware finance platform that lets Country, Regional, and Global leaders self-serve monthly P&amp;L, SG&amp;A, and headcount variance commentary, compressing a week-long manual cycle to minutes. Databricks Genie "Ask-AI" assistant + SQL Warehouse dashboards, entitlement-based RBAC, OIDC/JWKS auth, query caching, and a Modify → Validate → Finalize workflow with automated roll-ups.
+              </p>
+              <div style="display:flex;align-items:flex-start;gap:11px;margin-top:16px;padding:12px 15px;background:rgba(194,90,38,.08);border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.08em;font-weight:600;padding-top:2px;white-space:nowrap">IMPACT →</span>
+                <span style="font-size:14.5px;color:var(--ink);font-weight:500">Country, Regional, and Global finance leaders now self-serve their monthly commentary in minutes instead of a week, and Global Finance can explore insights without waiting on Country or Region submissions.</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">FastAPI</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">React · Vite</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Databricks Genie</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">SQL Warehouse</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">RBAC · OIDC</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WP-02 -->
+          <div data-reveal style="position:relative;padding-left:64px;margin-bottom:26px">
+            <div style="position:absolute;left:19px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent)"></div>
+            <div data-tilt style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 6px 18px var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+                <span style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em">WP-02 · ARCHITECT &amp; FULL-STACK</span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">SELF-SERVE ANALYTICS</span>
+              </div>
+              <h3 style="font-size:26px;margin-top:10px">BISON: Conversational NL-to-SQL</h3>
+              <p style="color:var(--ink-2);font-size:16px;margin-top:10px;max-width:60em">
+                A conversational NL-to-SQL assistant answering finance questions (turnover, SG&amp;A, plan-vs-actual, YoY/QoQ) over a Databricks warehouse via an 8-phase LangGraph pipeline: follow-up detection, entity resolution (Azure AI Search), template matching, SQL generation/execution, and answer synthesis with memory. Shipped full-stack with an interactive-chart chat UI, CSV export, SSO, a 30+ scenario Playwright eval/regression suite, and Dockerized CI/CD.
+              </p>
+              <div style="display:flex;align-items:flex-start;gap:11px;margin-top:16px;padding:12px 15px;background:rgba(194,90,38,.08);border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.08em;font-weight:600;padding-top:2px;white-space:nowrap">IMPACT →</span>
+                <span style="font-size:14.5px;color:var(--ink);font-weight:500">Finance business users answer their own turnover, SG&amp;A, and plan-vs-actual questions on demand, removing the analyst bottleneck and cutting time-to-answer from hours to seconds.</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">LangGraph</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">GPT-4o</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Next.js</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Azure AI Search</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Playwright</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WP-03 -->
+          <div data-reveal style="position:relative;padding-left:64px;margin-bottom:26px">
+            <div style="position:absolute;left:19px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent)"></div>
+            <div data-tilt style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 6px 18px var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+                <span style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em">WP-03 · AGENTIC PLATFORM</span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">WEEKS → MINUTES</span>
+              </div>
+              <h3 style="font-size:26px;margin-top:10px">Vaccine &amp; HIV Demand Forecasting</h3>
+              <p style="color:var(--ink-2);font-size:16px;margin-top:10px;max-width:60em">
+                Architected an agentic forecasting microservice: an 8-stage LangChain analogue-blend pipeline with executor/reviewer factor scoring, a Claude grounding audit that strips hallucinations, and Monte-Carlo-banded uptake curves, producing probabilistic Worst/Base/Best launch forecasts across Vaccines and HIV brands. Per-stage deterministic fallbacks keep output auditable during gateway outages; async jobs stream live progress to a React dashboard.
+              </p>
+              <div style="display:flex;align-items:flex-start;gap:11px;margin-top:16px;padding:12px 15px;background:rgba(194,90,38,.08);border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.08em;font-weight:600;padding-top:2px;white-space:nowrap">IMPACT →</span>
+                <span style="font-size:14.5px;color:var(--ink);font-weight:500">Brand and launch teams get a defensible demand forecast on demand in minutes instead of a weeks-long manual modelling exercise, directly informing launch and demand-planning decisions.</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">LangChain</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">GPT + Claude</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Monte Carlo</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">PostgreSQL</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WP-04 -->
+          <div data-reveal style="position:relative;padding-left:64px;margin-bottom:26px">
+            <div style="position:absolute;left:19px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent)"></div>
+            <div data-tilt style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 6px 18px var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+                <span style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em">WP-04 · DOCUMENT INTELLIGENCE</span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">~6 HRS/DOC SAVED</span>
+              </div>
+              <h3 style="font-size:26px;margin-top:10px">Legal Document Intelligence (ICF)</h3>
+              <p style="color:var(--ink-2);font-size:16px;margin-top:10px;max-width:60em">
+                A GenAI tool that verifies site-level Informed Consent Forms against the GSK master template by parsing PDFs with Azure AI Document Intelligence, aligning sections via embeddings + cosine similarity in Azure AI Search, and using GPT-4o to flag missing clauses and deviations from legal procedure. Saves ~6 hours of review per document, compressing a two-week cycle; adopted by legal teams. Built with Celery async processing, a highlighted-deviation PDF viewer, Key Vault, and LangSmith tracing.
+              </p>
+              <div style="display:flex;align-items:flex-start;gap:11px;margin-top:16px;padding:12px 15px;background:rgba(194,90,38,.08);border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.08em;font-weight:600;padding-top:2px;white-space:nowrap">IMPACT →</span>
+                <span style="font-size:14.5px;color:var(--ink);font-weight:500">Legal reviewers save ~6 hours per document and a two-week cycle collapses to a fast, consistent check, adopted by legal teams as their standard consent-form review.</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Azure Doc Intelligence</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Embeddings + RAG</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">GPT-4o</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Celery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WP-05 (GSK) -->
+          <div data-reveal style="position:relative;padding-left:64px;margin-bottom:26px">
+            <div style="position:absolute;left:19px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent)"></div>
+            <div data-tilt style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 6px 18px var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+                <span style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em">WP-05 · GOVERNANCE</span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">83 USE CASES REVIEWED</span>
+              </div>
+              <h3 style="font-size:26px;margin-top:10px">Responsible AI Governance</h3>
+              <p style="color:var(--ink-2);font-size:16px;margin-top:10px;max-width:60em">
+                Reviewed 83 AI use cases across two quarters, flagged ~40–45 for remediation, built governance dashboards, managed the AI registry, and co-founded the Global Functions Responsible AI Forum that standardized the enterprise AI-review methodology.
+              </p>
+              <div style="display:flex;align-items:flex-start;gap:11px;margin-top:16px;padding:12px 15px;background:rgba(194,90,38,.08);border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.08em;font-weight:600;padding-top:2px;white-space:nowrap">IMPACT →</span>
+                <span style="font-size:14.5px;color:var(--ink);font-weight:500">Gave senior Finance and Legal stakeholders a clear enterprise-wide AI risk view and one standard review methodology to trust.</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Risk Assessment</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Governance Dashboards</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">AI Registry</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Stakeholder Reporting</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WP-06 (personal) -->
+          <div data-reveal style="position:relative;padding-left:64px;margin-bottom:26px">
+            <div style="position:absolute;left:19px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent)"></div>
+            <div data-tilt style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 6px 18px var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                <span style="display:inline-flex;align-items:center;gap:9px"><span style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em">WP-06 · PUBLICATION</span><span style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--accent);background:rgba(194,90,38,.1);padding:2px 8px;border-radius:999px">PERSONAL</span></span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">IEEE I2CT 2024</span>
+              </div>
+              <h3 style="font-size:26px;margin-top:10px">Knowledge Graphs for OSS</h3>
+              <p style="color:var(--ink-2);font-size:16px;margin-top:10px;max-width:60em">
+                Modeled GitHub open-source ecosystems (repositories, contributors, commits) as a knowledge graph and applied PageRank, centrality, and community detection to surface influential contributors and collaboration clusters. Published at <strong style="color:var(--ink);font-weight:600">IEEE I2CT 2024</strong>.
+              </p>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Neo4j</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">GraphML</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Python</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">FastAPI</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WP-07 (personal) -->
+          <div data-reveal style="position:relative;padding-left:64px">
+            <div style="position:absolute;left:19px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--accent)"></div>
+            <div data-tilt style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:0 6px 18px var(--shadow)">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                <span style="display:inline-flex;align-items:center;gap:9px"><span style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em">WP-07 · FINE-TUNING</span><span style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--accent);background:rgba(194,90,38,.1);padding:2px 8px;border-radius:999px">PERSONAL</span></span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">+30% ACCURACY GAIN</span>
+              </div>
+              <h3 style="font-size:26px;margin-top:10px">Breast-Cancer Q&amp;A LLM</h3>
+              <p style="color:var(--ink-2);font-size:16px;margin-top:10px;max-width:60em">
+                Built an end-to-end supervised fine-tuning pipeline (data prep → checkpointing) on Qwen2.5-1.5B, achieving <strong style="color:var(--ink);font-weight:600">+30% domain-specific accuracy</strong> over the base model, and documented the fine-tuning vs. RAG trade-offs.
+              </p>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">PyTorch</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Hugging Face</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">Qwen2.5-1.5B</span>
+                <span style="font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);background:var(--paper);padding:4px 10px;border-radius:999px">SFT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+       </div>
+      </section>
+
+      <!-- ============ SKILLS / KIT ============ -->
+      <section id="skills" style="max-width:1120px;margin:0 auto;padding:84px 28px">
+        <div data-reveal style="display:flex;align-items:baseline;gap:14px;margin-bottom:34px">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">03</span>
+          <h2 style="font-size:clamp(30px,4vw,46px)">The kit: technical stack</h2>
+          <span style="flex:1;height:1px;background:var(--line)"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px">
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span style="font-family:var(--mono);color:var(--accent);font-size:13px">01</span><h3 style="font-size:18px">Generative &amp; Agentic AI</h3></div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Agentic AI</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Multi-Agent Orchestration</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">LangGraph</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">LangChain</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">MCP</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Tool / Function Calling</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">ReAct</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Guardrails</span>
+            </div>
+          </div>
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span style="font-family:var(--mono);color:var(--accent);font-size:13px">02</span><h3 style="font-size:18px">RAG, Retrieval &amp; LLMs</h3></div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Hybrid &amp; Agentic RAG</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">GraphRAG</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Azure AI Search</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Pinecone · FAISS · Chroma</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">pgvector</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">GPT-4o · Claude · Gemini</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Hugging Face</span>
+            </div>
+          </div>
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span style="font-family:var(--mono);color:var(--accent);font-size:13px">03</span><h3 style="font-size:18px">LLMOps &amp; Evaluation</h3></div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">RAGAS</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">LangSmith</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Playwright · pytest</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">MLflow</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">CI/CD</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Cost &amp; Latency Opt.</span>
+            </div>
+          </div>
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span style="font-family:var(--mono);color:var(--accent);font-size:13px">04</span><h3 style="font-size:18px">Fine-Tuning &amp; ML</h3></div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">SFT · PEFT / LoRA</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Small Language Models</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">PyTorch</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">XGBoost</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Time-Series</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Monte Carlo</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">PySpark</span>
+            </div>
+          </div>
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span style="font-family:var(--mono);color:var(--accent);font-size:13px">05</span><h3 style="font-size:18px">Full-Stack, Cloud &amp; Data</h3></div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Python</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">FastAPI · Pydantic</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">REST · Microservices</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">React / Next.js</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Databricks</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">PostgreSQL</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Azure</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Docker</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">GitHub Actions</span>
+              <span style="font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:5px 11px;border-radius:999px">Copilot · Claude Code</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EXPERIENCE / ROUTE ============ -->
+      <section id="experience" style="background:var(--ink);color:var(--paper)">
+       <div style="max-width:1120px;margin:0 auto;padding:84px 28px">
+        <div data-reveal style="display:flex;align-items:baseline;gap:14px;margin-bottom:40px">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">04</span>
+          <h2 style="font-size:clamp(30px,4vw,46px)">The route so far</h2>
+          <span style="flex:1;height:1px;background:rgba(255,255,255,.16)"></span>
+        </div>
+        <div class="exp-grid" style="display:grid;grid-template-columns:1.4fr 1fr;gap:40px">
+          <div data-reveal>
+            <div style="display:flex;gap:16px">
+              <div style="font-family:var(--mono);font-size:12px;color:var(--accent);padding-top:4px;white-space:nowrap">2024 →<br>NOW</div>
+              <div>
+                <h3 style="font-size:24px">GSK (GlaxoSmithKline)</h3>
+                <div style="font-family:var(--mono);font-size:12px;opacity:.65;margin-top:4px">TECHNICAL ASSOCIATE · AI LEAD ENGINEER · GLOBAL FUNCTIONS · BENGALURU</div>
+                <p style="opacity:.82;font-size:16px;margin-top:14px;max-width:44em">
+                  Delivering enterprise GenAI platforms across Finance, Legal, Commercial, and Product. I work in a small pod of five: one UX designer, two full-stack developers, an architect, and a PM. I own the stakeholder management and the hard, accountable decisions, and contribute across the full lifecycle: architecture, agent design, backend and frontend, deployment, evaluation, and production ops.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div data-reveal style="display:flex;flex-direction:column;gap:16px">
+            <div style="border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:20px">
+              <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.06em">EDUCATION</div>
+              <h3 style="font-size:19px;margin-top:8px">B.Tech, Computer Science</h3>
+              <div style="opacity:.7;font-size:14px;margin-top:4px">PES University, Bengaluru · 2020–2024 · CGPA 8.46</div>
+            </div>
+            <div style="border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:20px">
+              <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.06em">CERTIFICATION</div>
+              <h3 style="font-size:19px;margin-top:8px">Databricks Certified GenAI Engineer</h3>
+              <div style="opacity:.7;font-size:14px;margin-top:4px">Associate · Credential 145101786 · 2025–2027</div>
+            </div>
+          </div>
+        </div>
+        <!-- recognition -->
+        <div data-reveal style="margin-top:44px;border-top:1px solid rgba(255,255,255,.14);padding-top:32px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:18px">AWARDS &amp; RECOGNITION</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+            <div><div style="font-family:var(--disp);font-weight:800;font-size:34px;color:var(--accent)">4×</div><div style="opacity:.75;font-size:14px;margin-top:2px">Silver Awards: RAI leadership, finance analytics accuracy &amp; UI, ICF reliability, 1st place Q4 Hackathon</div></div>
+            <div><div style="font-family:var(--disp);font-weight:800;font-size:34px;color:var(--accent)">1×</div><div style="opacity:.75;font-size:14px;margin-top:2px">Bronze: proactive risk identification &amp; delivery</div></div>
+            <div><div style="font-family:var(--disp);font-weight:800;font-size:34px;color:var(--accent)">GRA</div><div style="opacity:.75;font-size:14px;margin-top:2px">Global Recognition Award, GSK 2024</div></div>
+            <div><div style="font-family:var(--disp);font-weight:800;font-size:34px;color:var(--accent)">IEEE</div><div style="opacity:.75;font-size:14px;margin-top:2px">Published researcher, I2CT 2024</div></div>
+          </div>
+        </div>
+       </div>
+      </section>
+
+      <!-- ============ CONTACT / SUMMIT ============ -->
+      <section id="contact" style="max-width:1120px;margin:0 auto;padding:96px 28px 80px;text-align:center">
+        <div data-reveal>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.14em">05 · THE SUMMIT</span>
+          <h2 style="font-size:clamp(38px,6vw,72px);margin-top:16px;max-width:14em;margin-left:auto;margin-right:auto">Let's build something that ships.</h2>
+          <p style="font-size:18px;color:var(--ink-2);max-width:34em;margin:20px auto 0">
+            Hiring, collaborating, or just want to talk agents and altitude? Reach out on LinkedIn, I'm always up for the next ascent.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:34px">
+            <a href="https://linkedin.com/in/vijith-bg" style="display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;padding:15px 26px;border-radius:999px;font-weight:600;font-size:16px;box-shadow:0 10px 26px rgba(194,90,38,.3)">Connect on LinkedIn ↗</a>
+            <a href="https://github.com/crypto-vbg" style="display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--ink);padding:15px 26px;border-radius:999px;font-weight:600;font-size:16px;border:1.5px solid var(--ink)">GitHub ↗</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FOOTER ============ -->
+      <footer style="border-top:1px solid var(--line);background:var(--paper-2)">
+        <div style="max-width:1120px;margin:0 auto;padding:26px 28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.04em">
+          <span>© 2026 VIJITH BG · AI LEAD ENGINEER</span>
+          <span>12.97°N 77.59°E · BENGALURU, IN</span>
+          <span>BUILT FOR THE NEXT RIDGE 🏍 △</span>
+        </div>
+      </footer>
+
+      <!-- ============ CHAT WIDGET ============ -->
+      <button id="chat-fab" aria-label="Ask Vijith's AI assistant" style="position:fixed;bottom:22px;right:22px;z-index:80;display:flex;align-items:center;gap:9px;background:var(--ink);color:var(--paper);border:none;padding:13px 18px;border-radius:999px;font-family:var(--body);font-weight:600;font-size:14px;cursor:pointer;box-shadow:0 12px 30px var(--shadow)">
+        <span style="position:relative;width:9px;height:9px;display:inline-flex">
+          <span style="position:absolute;inset:0;border-radius:50%;background:var(--accent);animation:fabRing 2.4s ease-out infinite"></span>
+          <span style="position:absolute;inset:0;border-radius:50%;background:var(--accent);animation:fabDot 2.4s ease-in-out infinite"></span>
+        </span> Ask about me
+      </button>
+      <div id="chat-panel" style="display:none;position:fixed;bottom:82px;right:22px;z-index:81;width:360px;max-width:calc(100vw - 40px);height:480px;max-height:calc(100vh - 120px);background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 60px rgba(60,45,25,.3);flex-direction:column;overflow:hidden;transform-origin:bottom right">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--ink);color:var(--paper)">
+          <span style="font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:-.02em">△ Ask about Vijith</span>
+          <button id="chat-close" aria-label="Close chat" style="background:none;border:none;color:var(--paper);font-size:22px;line-height:1;cursor:pointer;opacity:.7;padding:0">×</button>
+        </div>
+        <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px"></div>
+        <div style="display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)">
+          <input id="chat-input" placeholder="Ask about his projects, skills…" autocomplete="off" style="flex:1;min-width:0;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:10px 15px;font-family:var(--body);font-size:14px;color:var(--ink);outline:none" />
+          <button id="chat-send" aria-label="Send" style="background:var(--accent);color:#fff;border:none;border-radius:999px;width:42px;height:42px;font-size:17px;cursor:pointer;flex:none">↑</button>
+        </div>
+      </div>
+
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

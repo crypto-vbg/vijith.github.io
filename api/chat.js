@@ -148,10 +148,11 @@ export default async function handler(request) {
             contents,
             generationConfig: {
               temperature: 0.6,
-              // no thinking: reasoning tokens count against the output budget
-              // and were starving answers into empty responses
-              maxOutputTokens: 1024,
-              thinkingConfig: { thinkingBudget: 0 },
+              // The current gemini-flash-* models reject thinkingBudget:0
+              // (400 INVALID_ARGUMENT), so we let the model think but give a
+              // generous output budget so reasoning tokens don't starve the
+              // answer into an empty response.
+              maxOutputTokens: 2048,
             },
           }),
         }
