@@ -28,3 +28,6 @@ video/
 
 # raw profile photo source (served copy lives in public/media)
 profile_image/
+
+.vercel
+.env*

@@ -49,7 +49,7 @@ export const SITE = {
       "Generative AI Developer",
       "Agentic AI Builder",
       "End-to-End Full-Stack AI Engineer",
-      "Forward Deployed Engineer at heart",
+      "Forward Deployed Engineer",
     ],
     description:
       "I don't just build software I build **intelligent, scalable AI systems**. From ambiguous business problem to production: multi-agent systems, enterprise RAG, NL-to-SQL analytics and LLM fine-tuning, shipped end to end with **security, evals and governance** built in.",
