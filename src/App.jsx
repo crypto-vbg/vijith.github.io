@@ -1,4 +1,5 @@
 import { motion, useScroll, useSpring } from "framer-motion";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Nav from "./components/Nav.jsx";
 import Hero from "./components/Hero.jsx";
 import About from "./components/About.jsx";
@@ -34,6 +35,7 @@ export default function App() {
       </main>
       <Footer />
       <Chatbot />
+      <SpeedInsights />
     </>
   );
 }
