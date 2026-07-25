@@ -1151,3 +1151,60 @@ footer {
     background: rgba(10, 8, 6, 0.95);
   }
 }
+
+/* ================================================================
+   Interaction layer — added on top of the base theme
+   1. glow-card  : kokonut-style cursor spotlight (driven by --mx/--my)
+   2. g-char     : anime.js per-character title cascade
+   3. magnetic   : anime.js magnetic CTA wrapper
+   ================================================================ */
+
+/* 1. Cursor spotlight ------------------------------------------------ */
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
+.glow-card > * {
+  position: relative;
+  z-index: 1;
+}
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(242, 184, 128, 0.18),
+    rgba(232, 135, 95, 0.07) 42%,
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+/* 2. Title character cascade ---------------------------------------- */
+.grad-title-wrap {
+  display: inline;
+}
+.g-char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+/* 3. Magnetic CTA --------------------------------------------------- */
+.magnetic {
+  display: inline-block;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-card::before {
+    display: none;
+  }
+}

@@ -94,7 +94,7 @@ export default function Projects() {
         <div className="proj-grid">
           {projects.items.map((p, i) => (
             <Reveal key={p.title} delay={0.08 * (i % 2)}>
-              <div className="proj-card">
+              <div className="proj-card glow-card">
                 <div className="beam" />
                 <div className="proj-viz">
                   <Viz type={p.viz} />

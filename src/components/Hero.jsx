@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { SITE } from "../site.config.js";
 import { RichText } from "./text.jsx";
+import { useLiteMode } from "./useLiteMode.js";
+import Magnetic from "./Magnetic.jsx";
 
 function useTypewriter(words) {
   const [text, setText] = useState("");
@@ -35,22 +37,6 @@ function useTypewriter(words) {
     return () => clearTimeout(timer);
   }, [words]);
   return text;
-}
-
-/** True on phones / reduced-motion — heavy effects are skipped entirely. */
-function useLiteMode() {
-  const [lite, setLite] = useState(true);
-  useEffect(() => {
-    const check = () =>
-      setLite(
-        window.matchMedia("(max-width: 820px)").matches ||
-          window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      );
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return lite;
 }
 
 /**
@@ -130,9 +116,11 @@ export default function Hero() {
             <RichText text={hero.description} />
           </motion.div>
           <motion.div className="hero-actions" variants={fadeUp} custom={4}>
-            <a className="btn-primary" href="#experience">
-              {hero.ctaSecondary}
-            </a>
+            <Magnetic disabled={lite}>
+              <a className="btn-primary" href="#experience">
+                {hero.ctaSecondary}
+              </a>
+            </Magnetic>
           </motion.div>
           <motion.div className="hero-stats" variants={fadeUp} custom={5}>
             {hero.stats.map((s) => (

@@ -9,6 +9,7 @@ import Journey from "./components/Journey.jsx";
 import Contact from "./components/Contact.jsx";
 import Footer from "./components/Footer.jsx";
 import Chatbot from "./components/Chatbot/Chatbot.jsx";
+import { useCardSpotlight } from "./components/useCardSpotlight.js";
 
 /** Thin sunset-gradient bar tracking scroll — the route progress of the ride. */
 function RouteProgress() {
@@ -18,6 +19,7 @@ function RouteProgress() {
 }
 
 export default function App() {
+  useCardSpotlight();
   return (
     <>
       <RouteProgress />

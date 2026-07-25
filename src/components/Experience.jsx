@@ -25,7 +25,7 @@ export default function Experience() {
           {xp.items.map((item, i) => (
             <Reveal key={item.title} delay={0.08 * (i % 3)}>
               <div className="xp-item">
-                <div className="xp-card">
+                <div className="xp-card glow-card">
                   <div className="xp-meta">
                     <span className="xp-role-tag">{item.tag}</span>
                   </div>
