@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Markdown from "./Markdown.jsx";
+import MorphFab from "./MorphFab.jsx";
+import AiTextLoading from "./AiTextLoading.jsx";
 import { SITE } from "../../site.config.js";
 import {
   Monogram,
@@ -258,11 +260,7 @@ export default function Chatbot() {
                 <div className={`cb-msg ${m.role} ${m.error ? "error" : ""}`} key={i}>
                   <div className="cb-bubble">
                     {m.role === "assistant" ? <Markdown text={m.content} /> : m.content}
-                    {m.streaming && !m.content && (
-                      <span className="cb-typing">
-                        <i /> <i /> <i />
-                      </span>
-                    )}
+                    {m.streaming && !m.content && <AiTextLoading />}
                   </div>
                 </div>
               ))}
@@ -339,7 +337,7 @@ export default function Chatbot() {
         whileTap={{ scale: 0.94 }}
         aria-label={open ? "Close chat" : "Chat with Vijith's AI assistant"}
       >
-        {open ? <CloseIcon size={22} /> : <Monogram size={34} dark />}
+        <MorphFab open={open} size={34} />
         {!open && <span className="cb-fab-ring" />}
       </motion.button>
     </>
