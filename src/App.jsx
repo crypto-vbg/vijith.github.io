@@ -10,22 +10,25 @@ import Contact from "./components/Contact.jsx";
 import Footer from "./components/Footer.jsx";
 import Chatbot from "./components/Chatbot/Chatbot.jsx";
 import { useCardSpotlight } from "./components/useCardSpotlight.js";
+import { useMotionPreferences } from "./components/MotionPreferences.jsx";
 
 /** Thin sunset-gradient bar tracking scroll — the route progress of the ride. */
 function RouteProgress() {
+  const { reduced } = useMotionPreferences();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
-  return <motion.div className="route-progress" style={{ scaleX }} aria-hidden="true" />;
+  return <motion.div className="route-progress" style={{ scaleX: reduced ? scrollYProgress : scaleX }} aria-hidden="true" />;
 }
 
 export default function App() {
   useCardSpotlight();
   return (
     <>
+      <a className="skip-link" href="#main">Skip to content</a>
       <RouteProgress />
       <div className="film-grain" aria-hidden="true" />
       <Nav />
-      <main>
+      <main id="main" tabIndex={-1}>
         <Hero />
         <About />
         <Experience />

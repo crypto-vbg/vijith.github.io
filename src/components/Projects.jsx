@@ -1,9 +1,22 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useMotionPreferences } from "./MotionPreferences.jsx";
 import Reveal from "./Reveal.jsx";
 import { SITE } from "../site.config.js";
 import { GradTitle } from "./text.jsx";
 
 /** Small animated SVG motifs that give each project card life. */
 function Viz({ type }) {
+  if (type === "voice") {
+    return (
+      <div className="voice-visual" aria-hidden="true">
+        <div className="voice-orbit"><span className="voice-core">m</span></div>
+        <div className="voice-wave">
+          {Array.from({ length: 37 }, (_, i) => <span key={i} style={{ '--bar-height': (12 + Math.abs(Math.sin(i * 1.8)) * 50 * (1 - Math.abs(i - 18) / 25)) + 'px', '--delay': (i * -0.08) + 's' }} />)}
+        </div>
+      </div>
+    );
+  }
   if (type === "constellation") {
     const nodes = [
       [30, 70], [90, 30], [150, 80], [210, 40], [270, 90],
@@ -79,43 +92,58 @@ function Viz({ type }) {
   );
 }
 
+function ProjectCard({ project: p, featuredLabel }) {
+  return (
+    <article className={`proj-card glow-card ${p.featured ? "proj-featured" : ""}`}>
+      <div className="beam" aria-hidden="true" />
+      <div className="proj-art" aria-hidden="true">
+        {p.featured && <span className="featured-label"><span />{featuredLabel}</span>}
+        <div className="proj-viz"><Viz type={p.viz} /></div>
+        {p.flow && <div className="voice-flow">{p.flow.map((step, i) => <span key={step}>{i > 0 && <i>→</i>}{step}</span>)}</div>}
+      </div>
+      <div className="proj-content">
+        <span className="proj-tag">{p.tag}</span>
+        <h3 className="proj-title">{p.title}</h3>
+        <p className="proj-desc">{p.desc}</p>
+        {p.highlights && <ul className="project-highlights">{p.highlights.map(h => <li key={h}>{h}</li>)}</ul>}
+        <div className="chip-row">{p.chips.map(c => <span className="chip" key={c}>{c}</span>)}</div>
+        {p.link && <a className="proj-link" href={p.link} target="_blank" rel="noreferrer" aria-label={`${p.linkLabel.replace(/→/g, '').trim()}: ${p.title} (opens in a new tab)`}>{p.linkLabel.replace(/→/g, '').trim()}<span className="action-arrow" aria-hidden="true">↗</span></a>}
+      </div>
+    </article>
+  );
+}
+
 export default function Projects() {
   const { projects } = SITE;
+  const [filter, setFilter] = useState(projects.allLabel);
+  const { reduced } = useMotionPreferences();
+  const categories = [projects.allLabel, ...new Set(projects.items.map(p => p.category))];
+  const visible = projects.items.filter(p => filter === projects.allLabel || p.category === filter);
   return (
     <section id="projects">
       <div className="container">
         <Reveal>
           <div className="kicker">{projects.kicker}</div>
-          <h2 className="section-title">
-            <GradTitle text={projects.title} />
-          </h2>
+          <h2 className="section-title"><GradTitle text={projects.title} /></h2>
           <p className="section-sub">{projects.subtitle}</p>
         </Reveal>
-        <div className="proj-grid">
-          {projects.items.map((p, i) => (
-            <Reveal key={p.title} delay={0.08 * (i % 2)}>
-              <div className="proj-card glow-card">
-                <div className="beam" />
-                <div className="proj-viz">
-                  <Viz type={p.viz} />
-                </div>
-                <span className="proj-tag">{p.tag}</span>
-                <h4 className="proj-title">{p.title}</h4>
-                <p className="proj-desc">{p.desc}</p>
-                <div className="chip-row" style={{ marginBottom: p.link ? 16 : 0 }}>
-                  {p.chips.map((c) => (
-                    <span className="chip" key={c}>{c}</span>
-                  ))}
-                </div>
-                {p.link && (
-                  <a className="proj-link" href={p.link} target="_blank" rel="noreferrer">
-                    {p.linkLabel}
-                  </a>
-                )}
-              </div>
-            </Reveal>
-          ))}
+        <div className="project-toolbar">
+          <div className="project-filters" role="group" aria-label="Filter projects">
+            {categories.map(category => <button key={category} aria-pressed={filter === category} aria-controls="project-results" onClick={() => setFilter(category)}>{category}<span>{category === projects.allLabel ? projects.items.length : projects.items.filter(p => p.category === category).length}</span></button>)}
+          </div>
+          <span className="sr-only" role="status">{visible.length} {visible.length === 1 ? 'project' : 'projects'} shown</span>
         </div>
+        <motion.div id="project-results" className="proj-grid" layout={!reduced}>
+          <AnimatePresence initial={false} mode="popLayout">
+            {visible.map(p => (
+              <motion.div className={p.featured ? "featured-slot" : "project-slot"} key={p.title} layout={!reduced}
+                initial={{ opacity: 0, y: reduced ? 0 : 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                transition={{ duration: reduced ? 0 : 0.28 }}>
+                <ProjectCard project={p} featuredLabel={projects.featuredLabel} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

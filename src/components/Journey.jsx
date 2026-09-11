@@ -1,6 +1,7 @@
 import Reveal from "./Reveal.jsx";
 import { SITE } from "../site.config.js";
 import { INTEREST_ICONS } from "./Icons.jsx";
+import { useMotionPreferences } from "./MotionPreferences.jsx";
 
 // Deterministic pseudo-random star field (stable across renders).
 const STARS = Array.from({ length: 90 }, (_, i) => {
@@ -18,6 +19,7 @@ const ROAD_PATH =
   "M -60,600 C 240,560 380,470 560,455 C 760,438 820,520 1040,505 C 1260,490 1360,430 1520,438";
 
 function Scene() {
+  const { reduced } = useMotionPreferences();
   return (
     <>
       {/* early-dusk stars + low golden sun */}
@@ -104,7 +106,7 @@ function Scene() {
           strokeDasharray="14 20" className="road-dash"
         />
         {/* rider */}
-        <g className="rider">
+        <g className="rider" transform={reduced ? "translate(760 478)" : undefined}>
           <g>
             {/* headlight beam */}
             <path d="M8,-4 L58,-14 L58,8 L8,4 Z" fill="url(#beam)" opacity="0.8" />
@@ -115,7 +117,7 @@ function Scene() {
             <circle cx="-4" cy="-11" r="2.6" fill="#140b06" />
             <circle cx="8" cy="0" r="1.8" fill="#ffe9b3" className="headlight" />
           </g>
-          <animateMotion dur="16s" repeatCount="indefinite" rotate="auto" path={ROAD_PATH} />
+          {!reduced && <animateMotion dur="16s" repeatCount="indefinite" rotate="auto" path={ROAD_PATH} />}
         </g>
         <defs>
           <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">

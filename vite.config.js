@@ -2,9 +2,45 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { contentPath, generateContent } from "./scripts/content.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+function portfolioContentPlugin() {
+  const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+  return {
+    name: "portfolio-content",
+    buildStart() { generateContent(); },
+    configureServer(server) { server.watcher.add(contentPath); },
+    handleHotUpdate({ file, server }) {
+      if (file !== contentPath.replaceAll('\\', '/') && file !== contentPath) return;
+      try {
+        generateContent();
+        server.ws.send({ type: 'full-reload' });
+      } catch (error) {
+        server.ws.send({ type: 'error', err: { message: error.message, stack: '', plugin: 'portfolio-content' } });
+      }
+      return [];
+    },
+    transformIndexHtml(html) {
+      const site = generateContent();
+      const image = new URL(site.about.photo?.src || site.hero.film.poster, site.siteUrl).href;
+      const person = {
+        '@context': 'https://schema.org', '@type': 'Person', name: site.name,
+        url: site.siteUrl, image, jobTitle: site.hero.roles[0], description: site.metaDescription,
+        sameAs: [site.links.linkedin, site.links.github],
+      };
+      return html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escape(site.metaTitle)}</title>`)
+        .replace(/(<meta (?:name|property)="(?:description|og:description|twitter:description)" content=")[^"]*("\s*\/?>)/g, (_, a, b) => a + escape(site.metaDescription) + b)
+        .replace(/(<meta (?:name|property)="(?:og:title|twitter:title)" content=")[^"]*("\s*\/?>)/g, (_, a, b) => a + escape(site.metaTitle) + b)
+        .replace(/(<meta (?:name|property)="(?:og:image|twitter:image)" content=")[^"]*("\s*\/?>)/g, (_, a, b) => a + escape(image) + b)
+        .replace(/(<meta property="og:url" content=")[^"]*("\s*\/?>)/, (_, a, b) => a + escape(site.siteUrl) + b)
+        .replace(/(<link rel="canonical" href=")[^"]*("\s*\/?>)/, (_, a, b) => a + escape(site.siteUrl) + b)
+        .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, () => `<script type="application/ld+json">${JSON.stringify(person).replace(/</g, '\\u003c')}</script>`);
+    },
+  };
+}
 
 // Dev-only middleware that serves the Vercel edge-style functions in /api
 // so the chatbot can be tested locally with `npm run dev`.
@@ -19,7 +55,7 @@ function localApiPlugin() {
         const file = path.join(__dirname, "api", `${name}.js`);
         if (!fs.existsSync(file)) return next();
         try {
-          const mod = await import(pathToFileURL(file).href + `?t=${Date.now()}`);
+          const mod = await server.ssrLoadModule(file);
           const request = await nodeReqToWebRequest(req);
           const response = await mod.default(request);
           res.statusCode = response.status;
@@ -64,5 +100,5 @@ async function nodeReqToWebRequest(req) {
 }
 
 export default defineConfig({
-  plugins: [react(), localApiPlugin()],
+  plugins: [portfolioContentPlugin(), react(), localApiPlugin()],
 });

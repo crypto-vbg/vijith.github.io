@@ -4,6 +4,7 @@ import Markdown from "./Markdown.jsx";
 import MorphFab from "./MorphFab.jsx";
 import AiTextLoading from "./AiTextLoading.jsx";
 import { SITE } from "../../site.config.js";
+import { useMotionPreferences } from "../MotionPreferences.jsx";
 import {
   Monogram,
   CloseIcon,
@@ -38,6 +39,7 @@ function loadHistory() {
 }
 
 export default function Chatbot() {
+  const { reduced } = useMotionPreferences();
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("unknown");
   const [messages, setMessages] = useState(loadHistory);
@@ -47,6 +49,19 @@ export default function Chatbot() {
   const [queueMsgIdx, setQueueMsgIdx] = useState(0);
   const scrollRef = useRef(null);
   const abortRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement;
+    inputRef.current?.focus({ preventScroll: true });
+    const onKey = event => { if (event.key === "Escape") setOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true });
+    };
+  }, [open]);
 
   // ----- persistence -----
   useEffect(() => {
@@ -87,8 +102,8 @@ export default function Chatbot() {
 
   // ----- autoscroll -----
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, queue, busy]);
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: reduced ? "auto" : "smooth" });
+  }, [messages, queue, busy, reduced]);
 
   // ----- rotating queue copy -----
   useEffect(() => {
@@ -211,7 +226,7 @@ export default function Chatbot() {
   const clearChat = () => {
     stop();
     setMessages([]);
-    sessionStorage.removeItem(STORAGE_KEY);
+    try { sessionStorage.removeItem(STORAGE_KEY); } catch { /* Storage is optional. */ }
   };
 
   const meta = STATUS_META[status] ?? STATUS_META.unknown;
@@ -223,10 +238,13 @@ export default function Chatbot() {
         {open && (
           <motion.div
             className="cb-panel"
+            id="portfolio-assistant"
+            role="dialog"
+            aria-label={SITE.chatbot.title}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.97 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduced ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* header */}
             <div className="cb-header">
@@ -240,10 +258,10 @@ export default function Chatbot() {
                   {meta.hint}
                 </span>
               </div>
-              <button className="cb-iconbtn" title="Clear conversation" onClick={clearChat}>
+              <button className="cb-iconbtn" title="Clear conversation" aria-label="Clear conversation" onClick={clearChat}>
                 <ResetIcon size={15} />
               </button>
-              <button className="cb-iconbtn" title="Close" onClick={() => setOpen(false)}>
+              <button className="cb-iconbtn" title="Close" aria-label="Close assistant" onClick={() => setOpen(false)}>
                 <CloseIcon size={15} />
               </button>
             </div>
@@ -298,6 +316,8 @@ export default function Chatbot() {
             {/* input */}
             <div className="cb-inputrow">
               <textarea
+                ref={inputRef}
+                aria-label="Message the portfolio assistant"
                 rows={1}
                 value={input}
                 placeholder={SITE.chatbot.placeholder}
@@ -336,6 +356,8 @@ export default function Chatbot() {
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         aria-label={open ? "Close chat" : "Chat with Vijith's AI assistant"}
+        aria-expanded={open}
+        aria-controls="portfolio-assistant"
       >
         <MorphFab open={open} size={34} />
         {!open && <span className="cb-fab-ring" />}

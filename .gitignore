@@ -31,3 +31,7 @@ profile_image/
 
 .vercel
 .env*
+
+# Derived from CONTENT.md by scripts/content.mjs
+src/content.generated.json
+api/_lib/content.generated.js

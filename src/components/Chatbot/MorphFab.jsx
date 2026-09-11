@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { animate, svg } from "animejs";
+import { useMotionPreferences } from "../MotionPreferences.jsx";
 
 /* FAB monogram that morphs its "V" stroke into an "X" (close) with anime.js
    morphTo when the panel opens, and back when it closes. The two template
@@ -8,6 +9,7 @@ const V_PATH = "M14 18 L26 46 L32 32";
 const X_PATH = "M18 18 L46 46 M46 18 L18 46";
 
 export default function MorphFab({ open, size = 34 }) {
+  const { reduced } = useMotionPreferences();
   const pathRef = useRef(null);
   const vRef = useRef(null);
   const xRef = useRef(null);
@@ -17,17 +19,18 @@ export default function MorphFab({ open, size = 34 }) {
     const path = pathRef.current;
     if (!path) return;
     // Skip the morph on first paint — just land on the correct shape.
-    if (!mounted.current) {
+    if (!mounted.current || reduced) {
       mounted.current = true;
       path.setAttribute("d", open ? X_PATH : V_PATH);
       return;
     }
-    animate(path, {
+    const animation = animate(path, {
       d: svg.morphTo(open ? xRef.current : vRef.current),
       ease: "inOutCirc",
       duration: 480,
     });
-  }, [open]);
+    return () => animation.pause();
+  }, [open, reduced]);
 
   return (
     <svg viewBox="0 0 64 64" width={size} height={size} aria-hidden="true">

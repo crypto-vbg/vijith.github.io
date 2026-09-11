@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { animate, createSpring } from "animejs";
+import { useEffect, useRef } from "react";
+import { animate, spring } from "animejs";
 
 /**
  * Magnetic hover — the wrapped element leans toward the cursor while inside its
@@ -10,6 +10,7 @@ import { animate, createSpring } from "animejs";
 export default function Magnetic({ children, strength = 0.4, disabled = false }) {
   const ref = useRef(null);
   const running = useRef(null);
+  useEffect(() => () => running.current?.pause(), [disabled]);
 
   if (disabled) return children;
 
@@ -29,7 +30,7 @@ export default function Magnetic({ children, strength = 0.4, disabled = false })
     running.current = animate(el, {
       translateX: 0,
       translateY: 0,
-      ease: createSpring({ stiffness: 180, damping: 12 }),
+      ease: spring({ stiffness: 180, damping: 12 }),
     });
   };
 

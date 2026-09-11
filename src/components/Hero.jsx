@@ -4,10 +4,12 @@ import { SITE } from "../site.config.js";
 import { RichText } from "./text.jsx";
 import { useLiteMode } from "./useLiteMode.js";
 import Magnetic from "./Magnetic.jsx";
+import { useMotionPreferences } from "./MotionPreferences.jsx";
 
-function useTypewriter(words) {
+function useTypewriter(words, reduced) {
   const [text, setText] = useState("");
   useEffect(() => {
+    if (reduced) return;
     let word = 0;
     let char = 0;
     let deleting = false;
@@ -35,8 +37,8 @@ function useTypewriter(words) {
     };
     timer = setTimeout(tick, 400);
     return () => clearTimeout(timer);
-  }, [words]);
-  return text;
+  }, [words, reduced]);
+  return reduced ? words[0] : text;
 }
 
 /**
@@ -94,13 +96,14 @@ const fadeUp = {
 
 export default function Hero() {
   const { hero } = SITE;
-  const role = useTypewriter(hero.roles);
+  const { reduced } = useMotionPreferences();
+  const role = useTypewriter(hero.roles, reduced);
   const lite = useLiteMode();
   return (
     <section className="hero" id="top">
       <FilmBackdrop film={hero.film} lite={lite} />
       <div className="hero-inner">
-        <motion.div initial="hidden" animate="show">
+        <motion.div initial={reduced ? false : "hidden"} animate="show">
           <motion.div className="hero-badge" variants={fadeUp} custom={0}>
             <span className="pulse-dot" />
             {hero.badge}
@@ -109,18 +112,22 @@ export default function Hero() {
             {hero.titleFirst} <span className="grad-text">{hero.titleAccent}</span>
           </motion.h1>
           <motion.div className="hero-role" variants={fadeUp} custom={2}>
-            <span className="grad-text">{role}</span>
-            <span className="cursor" />
+            <span className="sr-only">{hero.roles.join(" · ")}</span>
+            <span className="grad-text" aria-hidden="true">{role}</span>
+            {!reduced && <span className="cursor" aria-hidden="true" />}
           </motion.div>
           <motion.div className="hero-desc" variants={fadeUp} custom={3}>
             <RichText text={hero.description} />
           </motion.div>
           <motion.div className="hero-actions" variants={fadeUp} custom={4}>
             <Magnetic disabled={lite}>
-              <a className="btn-primary" href="#experience">
-                {hero.ctaSecondary}
+              <a className="btn-primary" href={hero.ctaHref}>
+                {hero.ctaSecondary}<span className="action-arrow" aria-hidden="true">↗</span>
               </a>
             </Magnetic>
+            <button className="btn-ghost" onClick={() => window.dispatchEvent(new Event("open-chatbot"))}>
+              <span className="tiny-wave" aria-hidden="true"><i /><i /><i /><i /></span>{hero.chatLabel}
+            </button>
           </motion.div>
           <motion.div className="hero-stats" variants={fadeUp} custom={5}>
             {hero.stats.map((s) => (
@@ -132,6 +139,7 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
+      <a className="hero-scroll" href="#about"><span className="scroll-line" aria-hidden="true" />{hero.scrollLabel}<span aria-hidden="true">↓</span></a>
     </section>
   );
 }

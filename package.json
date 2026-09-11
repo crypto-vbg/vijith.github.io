@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "content:check": "node scripts/content.mjs",
+    "pretest": "node scripts/content.mjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "yaml": "^2.9.0"
   }
 }
